@@ -84,3 +84,60 @@ resource "random_password" "auth_token" {
   # Redis does not allow certain characters in passwords
   special = false
 }
+
+resource "aws_cloudwatch_metric_alarm" "cpu" {
+  for_each = local.instances
+
+  alarm_name          = "${each.value}-high-cpu"
+  alarm_description   = "${each.value} is using more than 90% of its CPU"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "5"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ElastiCache"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "90"
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    CacheClusterId = each.value
+  }
+
+  alarm_actions = var.alarm_actions.*.arn
+  ok_actions    = var.alarm_actions.*.arn
+}
+
+resource "aws_cloudwatch_metric_alarm" "memory" {
+  for_each = local.instances
+
+  alarm_name          = "${each.value}-datababase-memory-remaining"
+  alarm_description   = "${each.value} has less than ${local.memory_threshold_mb}MiB of memory remaining"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "FreeableMemory"
+  namespace           = "AWS/ElastiCache"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = local.memory_threshold_mb * 1024 * 1024
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    CacheClusterId = each.value
+  }
+
+  alarm_actions = var.alarm_actions.*.arn
+  ok_actions    = var.alarm_actions.*.arn
+}
+
+locals {
+  instances     = aws_elasticache_replication_group.this.member_clusters
+  instance_size = split(".", var.node_type)[2]
+  instance_size_thresholds = {
+    micro = 128
+    small = 768
+  }
+  memory_threshold_mb = try(
+    local.instance_size_thresholds[local.instance_size],
+    1024
+  )
+}
