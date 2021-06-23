@@ -85,7 +85,7 @@ resource "aws_db_instance" "this" {
     each.key == var.name ?
     join(
       "-",
-      concat(var.namespace, [random_id.snapshot_suffix.hex, "final"])
+      concat(var.namespace, [var.name, random_id.snapshot_suffix.hex, "final"])
     ) :
     null
   )
