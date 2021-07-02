@@ -1,8 +1,3 @@
-locals {
-  name            = join("-", distinct(concat(var.namespace, [var.name])))
-  replica_enabled = var.replica_count > 0
-}
-
 resource "aws_elasticache_replication_group" "this" {
   replication_group_id = coalesce(var.replication_group_id, local.name)
 
@@ -13,7 +8,7 @@ resource "aws_elasticache_replication_group" "this" {
   kms_key_id                    = var.kms_key == null ? null : var.kms_key.id
   multi_az_enabled              = local.replica_enabled
   node_type                     = var.node_type
-  number_cache_clusters         = var.replica_count + 1
+  number_cache_clusters         = local.instance_count
   parameter_group_name          = var.parameter_group_name
   port                          = var.port
   replication_group_description = var.description
@@ -86,10 +81,10 @@ resource "random_password" "auth_token" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu" {
-  for_each = local.instances
+  count = local.instance_count
 
-  alarm_name          = "${each.value}-high-cpu"
-  alarm_description   = "${each.value} is using more than 90% of its CPU"
+  alarm_name          = "${local.name}-${count.index}-high-cpu"
+  alarm_description   = "${local.name}-${count.index} is using more than 90% of its CPU"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "5"
   metric_name         = "CPUUtilization"
@@ -100,7 +95,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    CacheClusterId = each.value
+    CacheClusterId = local.instances[count.index]
   }
 
   alarm_actions = var.alarm_actions.*.arn
@@ -108,10 +103,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "memory" {
-  for_each = local.instances
+  count = local.instance_count
 
-  alarm_name          = "${each.value}-datababase-memory-remaining"
-  alarm_description   = "${each.value} has less than ${local.memory_threshold_mb}MiB of memory remaining"
+  alarm_name          = "${local.name}-${count.index}-datababase-memory-remaining"
+  alarm_description   = "${local.name}-${count.index} has less than ${local.memory_threshold_mb}MiB of memory remaining"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "FreeableMemory"
@@ -122,7 +117,7 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    CacheClusterId = each.value
+    CacheClusterId = local.instances[count.index]
   }
 
   alarm_actions = var.alarm_actions.*.arn
@@ -130,12 +125,17 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
 }
 
 locals {
-  instances     = aws_elasticache_replication_group.this.member_clusters
-  instance_size = split(".", var.node_type)[2]
+  instance_count  = var.replica_count + 1
+  instances       = sort(aws_elasticache_replication_group.this.member_clusters)
+  instance_size   = split(".", var.node_type)[2]
+  name            = join("-", distinct(concat(var.namespace, [var.name])))
+  replica_enabled = var.replica_count > 0
+
   instance_size_thresholds = {
     micro = 128
     small = 768
   }
+
   memory_threshold_mb = try(
     local.instance_size_thresholds[local.instance_size],
     1024
