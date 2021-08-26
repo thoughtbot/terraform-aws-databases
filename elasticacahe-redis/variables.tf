@@ -91,9 +91,9 @@ variable "snapshot_retention_limit" {
   default     = 7
 }
 
-variable "subnets" {
+variable "subnet_ids" {
   description = "Subnets connected to the database"
-  type        = map(object({ id = string }))
+  type        = list(string)
 }
 
 variable "subnet_group_name" {

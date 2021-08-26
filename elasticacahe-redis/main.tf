@@ -38,7 +38,7 @@ resource "aws_elasticache_subnet_group" "this" {
   )
 
   description = "Redis subnet group"
-  subnet_ids  = values(var.subnets).*.id
+  subnet_ids  = var.subnet_ids
 
   lifecycle {
     create_before_destroy = true

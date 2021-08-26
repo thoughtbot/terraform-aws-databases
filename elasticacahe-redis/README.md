@@ -56,7 +56,7 @@ Provision a Redis cluster using AWS ElastiCache.
 | <a name="input_replication_group_id"></a> [replication\_group\_id](#input\_replication\_group\_id) | Override the ID for the replication group | `string` | `""` | no |
 | <a name="input_snapshot_retention_limit"></a> [snapshot\_retention\_limit](#input\_snapshot\_retention\_limit) | Number of days to retain snapshots | `number` | `7` | no |
 | <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Override the name for the subnet group | `string` | `""` | no |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | Subnets connected to the database | `map(object({ id = string }))` | n/a | yes |
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets connected to the database | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
 | <a name="input_transit_encryption_enabled"></a> [transit\_encryption\_enabled](#input\_transit\_encryption\_enabled) | Set to false to disable TLS | `bool` | `true` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | VPC for the database instance | `object({ id = string })` | n/a | yes |

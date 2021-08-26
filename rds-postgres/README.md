@@ -7,14 +7,16 @@ Provision a Postgres database using AWS RDS.
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 3.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
 
 ## Modules
 
@@ -67,7 +69,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_security_group_name"></a> [security\_group\_name](#input\_security\_group\_name) | Override the name for the security group | `string` | `""` | no |
 | <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | Set to false to disable on-disk encryption | `bool` | `true` | no |
 | <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Override the name for the subnet group | `string` | `""` | no |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | Subnets connected to the database | `map(object({ id = string }))` | n/a | yes |
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets connected to the database | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
 | <a name="input_username"></a> [username](#input\_username) | Override the master username for the master user | `string` | `"postgres"` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | VPC for the database instance | `object({ id = string })` | n/a | yes |

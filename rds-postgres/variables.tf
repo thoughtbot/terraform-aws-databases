@@ -157,9 +157,9 @@ variable "storage_encrypted" {
   description = "Set to false to disable on-disk encryption"
 }
 
-variable "subnets" {
+variable "subnet_ids" {
   description = "Subnets connected to the database"
-  type        = map(object({ id = string }))
+  type        = list(string)
 }
 
 variable "subnet_group_name" {

@@ -160,7 +160,7 @@ resource "aws_db_subnet_group" "database" {
   )
 
   description = "Postgres subnet group"
-  subnet_ids  = values(var.subnets).*.id
+  subnet_ids  = var.subnet_ids
   tags        = var.tags
 
   lifecycle {
