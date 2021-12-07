@@ -1,3 +1,8 @@
+variable "admin_username" {
+  type        = string
+  description = "Username for the admin user"
+}
+
 variable "alarm_actions" {
   type        = list(object({ arn = string }))
   description = "SNS topcis or other actions to invoke for alarms"
@@ -121,10 +126,10 @@ variable "namespace" {
   description = "Prefix to be applied to created resources"
 }
 
-variable "password" {
+variable "initial_password" {
   type        = string
+  description = "Override the initial password for the admin user"
   default     = ""
-  description = "Override the generated password for the master user"
 }
 
 variable "performance_insights_enabled" {
@@ -172,12 +177,6 @@ variable "tags" {
   type        = map(string)
   description = "Tags to be applied to created resources"
   default     = {}
-}
-
-variable "username" {
-  type        = string
-  description = "Override the master username for the master user"
-  default     = "postgres"
 }
 
 variable "vpc" {

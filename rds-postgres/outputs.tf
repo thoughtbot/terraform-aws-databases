@@ -1,7 +1,7 @@
 locals {
   primary   = aws_db_instance.this[var.name]
   username  = local.primary.username
-  password  = coalesce(var.password, random_password.database.result)
+  password  = coalesce(var.initial_password, random_password.database.result)
   auth      = "${local.username}:${local.password}"
   endpoint  = local.primary.endpoint
   name      = local.primary.name
@@ -17,8 +17,8 @@ output "alarms" {
   }
 }
 
-output "password" {
-  description = "Password for connecting to this database"
+output "initial_password" {
+  description = "Initial admin password for connecting to this database"
   value       = local.password
 }
 
@@ -38,28 +38,6 @@ output "database_urls" {
     for endpoint in local.endpoints :
     "postgres://${local.auth}@${endpoint}/${local.name}"
   ]
-}
-
-output "policies" {
-  description = "Required IAM policies"
-  value       = []
-}
-
-output "secret_data" {
-  description = "Kubernetes secret data"
-
-  value = merge(
-    {
-      DATABASE_URL = "postgres://${local.auth}@${local.endpoint}/${local.name}"
-    },
-    zipmap(
-      keys(aws_db_instance.this),
-      [
-        for instance in values(aws_db_instance.this) :
-        "postgres://${local.auth}@${instance.endpoint}/${local.name}"
-      ]
-    )
-  )
 }
 
 output "security_group" {

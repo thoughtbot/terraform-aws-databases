@@ -104,13 +104,13 @@ resource "aws_db_instance" "this" {
 
   password = (
     each.key == var.name ?
-    coalesce(var.password, random_password.database.result) :
+    coalesce(var.initial_password, random_password.database.result) :
     null
   )
 
   username = (
     each.key == var.name ?
-    var.username :
+    var.admin_username :
     null
   )
 
@@ -125,6 +125,10 @@ resource "aws_db_instance" "this" {
       join("-", distinct(concat(var.namespace, [var.name])))
     )
   )
+
+  lifecycle {
+    ignore_changes = [password]
+  }
 }
 
 resource "aws_db_parameter_group" "this" {

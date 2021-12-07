@@ -41,6 +41,7 @@ Provision a Postgres database using AWS RDS.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_admin_username"></a> [admin\_username](#input\_admin\_username) | Username for the admin user | `string` | n/a | yes |
 | <a name="input_alarm_actions"></a> [alarm\_actions](#input\_alarm\_actions) | SNS topcis or other actions to invoke for alarms | `list(object({ arn = string }))` | `[]` | no |
 | <a name="input_allocated_storage"></a> [allocated\_storage](#input\_allocated\_storage) | Size in GB for the database instance | `number` | n/a | yes |
 | <a name="input_allowed_cidr_blocks"></a> [allowed\_cidr\_blocks](#input\_allowed\_cidr\_blocks) | CIDR blocks allowed to access the database | `list(string)` | `[]` | no |
@@ -55,6 +56,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine; defaults to Postgres 12.6 | `string` | `"12.6"` | no |
 | <a name="input_force_ssl"></a> [force\_ssl](#input\_force\_ssl) | Set to false to allow unencrypted connections to the database | `bool` | `true` | no |
 | <a name="input_identifiers"></a> [identifiers](#input\_identifiers) | Override the identifier for one or more databases | `map(string)` | `{}` | no |
+| <a name="input_initial_password"></a> [initial\_password](#input\_initial\_password) | Override the initial password for the admin user | `string` | `""` | no |
 | <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | Tier for the database instance | `string` | n/a | yes |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | Custom KMS key to encrypt data at rest | `object({ arn = string })` | `null` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | UTC day/time range during which maintenance can be performed, such as Mon:00:00-Mon:03:00 | `string` | `null` | no |
@@ -62,7 +64,6 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_multi_az"></a> [multi\_az](#input\_multi\_az) | Whether or not to use a high-availability/multi-availability-zone instance | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name for this database | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Prefix to be applied to created resources | `list(string)` | `[]` | no |
-| <a name="input_password"></a> [password](#input\_password) | Override the generated password for the master user | `string` | `""` | no |
 | <a name="input_performance_insights_enabled"></a> [performance\_insights\_enabled](#input\_performance\_insights\_enabled) | Set to false to disable performance insights | `bool` | `true` | no |
 | <a name="input_publicly_accessible"></a> [publicly\_accessible](#input\_publicly\_accessible) | Set to true to access this database outside the VPC | `bool` | `false` | no |
 | <a name="input_replica_names"></a> [replica\_names](#input\_replica\_names) | Read-only replicas to create for this database | `list(string)` | `[]` | no |
@@ -71,7 +72,6 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Override the name for the subnet group | `string` | `""` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets connected to the database | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
-| <a name="input_username"></a> [username](#input\_username) | Override the master username for the master user | `string` | `"postgres"` | no |
 | <a name="input_vpc"></a> [vpc](#input\_vpc) | VPC for the database instance | `object({ id = string })` | n/a | yes |
 
 ## Outputs
@@ -84,6 +84,5 @@ Provision a Postgres database using AWS RDS.
 | <a name="output_policies"></a> [policies](#output\_policies) | Required IAM policies |
 | <a name="output_primary"></a> [primary](#output\_primary) | Primary RDS database instance |
 | <a name="output_primary_database_url"></a> [primary\_database\_url](#output\_primary\_database\_url) | URL with all details for connecting to primary database |
-| <a name="output_secret_data"></a> [secret\_data](#output\_secret\_data) | Kubernetes secret data |
 | <a name="output_security_group"></a> [security\_group](#output\_security\_group) | Security group for this database instance |
 <!-- END_TF_DOCS -->
