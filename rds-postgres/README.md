@@ -78,11 +78,9 @@ Provision a Postgres database using AWS RDS.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_admin_username"></a> [admin\_username](#output\_admin\_username) | Admin username for connecting to this database |
 | <a name="output_alarms"></a> [alarms](#output\_alarms) | CloudWatch alarms for monitoring this database |
-| <a name="output_database_urls"></a> [database\_urls](#output\_database\_urls) | URL with all details for connecting to all instances |
-| <a name="output_password"></a> [password](#output\_password) | Password for connecting to this database |
-| <a name="output_policies"></a> [policies](#output\_policies) | Required IAM policies |
+| <a name="output_initial_password"></a> [initial\_password](#output\_initial\_password) | Initial admin password for connecting to this database |
 | <a name="output_primary"></a> [primary](#output\_primary) | Primary RDS database instance |
-| <a name="output_primary_database_url"></a> [primary\_database\_url](#output\_primary\_database\_url) | URL with all details for connecting to primary database |
 | <a name="output_security_group"></a> [security\_group](#output\_security\_group) | Security group for this database instance |
 <!-- END_TF_DOCS -->

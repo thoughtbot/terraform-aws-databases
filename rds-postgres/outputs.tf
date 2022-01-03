@@ -1,11 +1,12 @@
 locals {
-  primary   = aws_db_instance.this[var.name]
-  username  = local.primary.username
-  password  = coalesce(var.initial_password, random_password.database.result)
-  auth      = "${local.username}:${local.password}"
-  endpoint  = local.primary.endpoint
-  name      = local.primary.name
-  endpoints = values(aws_db_instance.this).*.endpoint
+  primary  = aws_db_instance.this[var.name]
+  username = local.primary.username
+  password = coalesce(var.initial_password, random_password.database.result)
+}
+
+output "admin_username" {
+  description = "Admin username for connecting to this database"
+  value       = local.username
 }
 
 output "alarms" {
@@ -25,19 +26,6 @@ output "initial_password" {
 output "primary" {
   description = "Primary RDS database instance"
   value       = local.primary
-}
-
-output "primary_database_url" {
-  description = "URL with all details for connecting to primary database"
-  value       = "postgres://${local.auth}@${local.endpoint}/${local.name}"
-}
-
-output "database_urls" {
-  description = "URL with all details for connecting to all instances"
-  value = [
-    for endpoint in local.endpoints :
-    "postgres://${local.auth}@${endpoint}/${local.name}"
-  ]
 }
 
 output "security_group" {
