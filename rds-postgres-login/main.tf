@@ -1,11 +1,12 @@
 module "secret" {
   source = "../generic-secret"
 
-  description     = "Postgres password for: ${local.full_name}"
-  name            = coalesce(var.secret_name, local.full_name)
-  resource_tags   = var.tags
-  trust_principal = var.trust_principal
-  trust_tags      = var.trust_tags
+  admin_principals = var.admin_principals
+  description      = "Postgres password for: ${local.full_name}"
+  name             = coalesce(var.secret_name, local.full_name)
+  read_principals  = var.read_principals
+  resource_tags    = var.tags
+  trust_tags       = var.trust_tags
 
   initial_value = jsonencode({
     dbname   = var.database.name

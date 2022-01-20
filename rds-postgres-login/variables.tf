@@ -9,6 +9,12 @@ variable "admin_login_kms_key_id" {
   description = "ARN of the KMS key used to encrypt the admin login"
 }
 
+variable "admin_principals" {
+  description = "Principals allowed to peform admin actions (default: current account)"
+  type        = list(string)
+  default     = null
+}
+
 variable "alternate_username" {
   description = "Username for the alternate login used during rotation"
   type        = string
@@ -33,6 +39,12 @@ variable "grants" {
   type        = list(string)
 }
 
+variable "read_principals" {
+  description = "Principals allowed to read the secret (default: current account)"
+  type        = list(string)
+  default     = null
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string
@@ -48,12 +60,6 @@ variable "tags" {
   description = "Tags to be applied to created resources"
   type        = map(string)
   default     = {}
-}
-
-variable "trust_principal" {
-  description = "Principal allowed to access the secret (default: current account)"
-  type        = string
-  default     = null
 }
 
 variable "trust_tags" {

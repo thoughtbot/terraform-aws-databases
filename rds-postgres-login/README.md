@@ -79,13 +79,14 @@ module "rds_admin_password" {
 |------|-------------|------|---------|:--------:|
 | <a name="input_admin_login_kms_key_id"></a> [admin\_login\_kms\_key\_id](#input\_admin\_login\_kms\_key\_id) | ARN of the KMS key used to encrypt the admin login | `string` | n/a | yes |
 | <a name="input_admin_login_secret_arn"></a> [admin\_login\_secret\_arn](#input\_admin\_login\_secret\_arn) | ARN of a SecretsManager secret containing admin login | `string` | `null` | no |
+| <a name="input_admin_principals"></a> [admin\_principals](#input\_admin\_principals) | Principals allowed to peform admin actions (default: current account) | `list(string)` | `null` | no |
 | <a name="input_alternate_username"></a> [alternate\_username](#input\_alternate\_username) | Username for the alternate login used during rotation | `string` | `null` | no |
 | <a name="input_database"></a> [database](#input\_database) | The database instance for which a login will be managed | <pre>object({<br>    address    = string<br>    arn        = string<br>    engine     = string<br>    identifier = string<br>    name       = string<br>    port       = number<br>  })</pre> | n/a | yes |
 | <a name="input_grants"></a> [grants](#input\_grants) | List of GRANT statements for this user | `list(string)` | n/a | yes |
+| <a name="input_read_principals"></a> [read\_principals](#input\_read\_principals) | Principals allowed to read the secret (default: current account) | `list(string)` | `null` | no |
 | <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | Override the name for this secret | `string` | `null` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets in which the rotation function should run | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
-| <a name="input_trust_principal"></a> [trust\_principal](#input\_trust\_principal) | Principal allowed to access the secret (default: current account) | `string` | `null` | no |
 | <a name="input_trust_tags"></a> [trust\_tags](#input\_trust\_tags) | Tags required on principals accessing the secret | `map(string)` | `{}` | no |
 | <a name="input_username"></a> [username](#input\_username) | The username for which a login will be managed | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC in which the rotation function should run | `string` | n/a | yes |
