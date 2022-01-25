@@ -123,11 +123,8 @@ def create_secret(service_client, arn, token):
         # Get the next username swapping between primary and alternate
         current_dict['username'] = get_alt_username(current_dict['username'])
 
-        # Get exclude characters from environment variable
-        exclude_characters = os.environ['EXCLUDE_CHARACTERS'] if 'EXCLUDE_CHARACTERS' in os.environ else ':/@"\'\\'
-
         # Generate a random password
-        passwd = service_client.get_random_password(ExcludeCharacters=exclude_characters)
+        passwd = service_client.get_random_password(ExcludePunctuation=True)
         current_dict['password'] = passwd['RandomPassword']
 
         # Add DATABASE_URL to secret
@@ -445,5 +442,6 @@ def dict_to_url(secret):
         url: DATABASE_URL-style string
     """
 
-    "postgres://%s:%s@%s:%s/%s" % (secret['username'], secret['password'],
-            secret['host'], secret['port'], secret['dbname'])
+    return "postgres://%s:%s@%s:%s/%s" % (secret['username'],
+            secret['password'], secret['host'], secret['port'],
+            secret['dbname'])
