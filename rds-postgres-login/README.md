@@ -59,8 +59,8 @@ module "rds_admin_password" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rotation"></a> [rotation](#module\_rotation) | ../secret-rotation-function |  |
-| <a name="module_secret"></a> [secret](#module\_secret) | ../generic-secret |  |
+| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.1.0 |  |
+| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret?ref=v0.1.0 |  |
 
 ## Resources
 
