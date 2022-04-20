@@ -1,7 +1,7 @@
 # AWS Database Modules for Terraform
 
-Quickly provision databases on AWS with policies and security groups suitable
-for use by pods in an EKS cluster.
+Provision databases on AWS with policies and security groups suitable for use by
+pods in an EKS cluster.
 
 Modules:
 
