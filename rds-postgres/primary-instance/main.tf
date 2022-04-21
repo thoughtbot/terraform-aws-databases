@@ -7,7 +7,7 @@ resource "aws_db_instance" "this" {
   db_subnet_group_name         = var.subnet_group_name
   engine                       = var.engine
   engine_version               = var.engine_version
-  identifier                   = var.name
+  identifier                   = var.identifier
   instance_class               = var.instance_class
   kms_key_id                   = var.kms_key_id
   maintenance_window           = var.maintenance_window
@@ -24,7 +24,7 @@ resource "aws_db_instance" "this" {
 
   final_snapshot_identifier = join(
     "-",
-    [var.name, random_id.snapshot_suffix.hex, "final"]
+    [var.identifier, random_id.snapshot_suffix.hex, "final"]
   )
 
   name = (
