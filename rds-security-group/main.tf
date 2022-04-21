@@ -2,7 +2,7 @@ resource "aws_security_group" "this" {
   description = var.description
   name        = join("-", distinct(concat(var.namespace, [var.name])))
   tags        = var.tags
-  vpc_id      = var.vpc.id
+  vpc_id      = var.vpc_id
 
   lifecycle {
     create_before_destroy = true

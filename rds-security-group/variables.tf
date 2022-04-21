@@ -40,7 +40,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "vpc" {
+variable "vpc_id" {
   description = "VPC for the source database security group"
-  type        = object({ id = string })
+  type        = string
 }
