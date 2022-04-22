@@ -72,8 +72,9 @@ variable "storage_encrypted" {
 }
 
 variable "subnet_group_name" {
-  description = "Name of the RDS subnet group"
+  description = "Name of the RDS subnet group (only for cross-region replication)"
   type        = string
+  default     = null
 }
 
 variable "tags" {
