@@ -1,6 +1,7 @@
 variable "admin_username" {
   type        = string
   description = "Username for the admin user"
+  default     = "postgres"
 }
 
 variable "allocated_storage" {
