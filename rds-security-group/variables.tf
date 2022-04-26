@@ -1,6 +1,6 @@
-variable "allowed_security_groups" {
+variable "allowed_security_group_ids" {
   description = "Security group allowed to access the database"
-  type        = list(object({ id = string }))
+  type        = list(string)
   default     = []
 }
 
@@ -22,12 +22,6 @@ variable "name" {
   description = "Name of the security group"
 }
 
-variable "namespace" {
-  type        = list(string)
-  default     = []
-  description = "Prefix to be applied to created resources"
-}
-
 variable "port" {
   type        = number
   description = "Port on which to listen"
@@ -40,7 +34,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "vpc" {
+variable "vpc_id" {
   description = "VPC for the source database security group"
-  type        = object({ id = string })
+  type        = string
 }

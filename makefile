@@ -2,7 +2,7 @@
 
 export TF_CLI_CONFIG_FILE := $(CURDIR)/.terraformrc
 
-MODULES         := $(foreach main,$(wildcard */main.tf),$(subst /main.tf,,$(main)))
+MODULES         := $(foreach main,$(wildcard */*/main.tf),$(subst /main.tf,,$(main)))
 MODULEMAKEFILES := $(foreach module,$(MODULES),$(module)/makefile)
 MAKEMODULES     := $(foreach module,$(MODULES),$(module)/default)
 CLEANMODULES    := $(foreach module,$(MODULES),$(module)/clean)
@@ -15,7 +15,9 @@ fmt:
 	terraform fmt -recursive
 
 .PHONY: layers
-layers: rds-postgres-login/rotation/postgres.zip
+layers: \
+	rds-postgres/admin-login/rotation/postgres.zip \
+	rds-postgres/user-login/rotation/postgres.zip
 
 .PHONY: modules
 modules: makefiles makemodules

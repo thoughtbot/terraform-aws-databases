@@ -1,42 +1,22 @@
-variable "admin_login_secret_arn" {
-  type        = string
-  description = "ARN of a SecretsManager secret containing admin login"
-  default     = null
-}
-
-variable "admin_login_kms_key_id" {
-  type        = string
-  description = "ARN of the KMS key used to encrypt the admin login"
-}
-
 variable "admin_principals" {
   description = "Principals allowed to peform admin actions (default: current account)"
   type        = list(string)
   default     = null
 }
 
-variable "alternate_username" {
-  description = "Username for the alternate login used during rotation"
+variable "database_name" {
+  description = "Name of the database to connect to"
   type        = string
-  default     = null
 }
 
-variable "database" {
-  description = "The database instance for which a login will be managed"
-
-  type = object({
-    address    = string
-    arn        = string
-    engine     = string
-    identifier = string
-    name       = string
-    port       = number
-  })
+variable "identifier" {
+  description = "Identifier of the database for which a login will be managed"
+  type        = string
 }
 
-variable "grants" {
-  description = "List of GRANT statements for this user"
-  type        = list(string)
+variable "initial_password" {
+  type        = string
+  description = "ARN of the KMS key used to encrypt the admin login"
 }
 
 variable "read_principals" {

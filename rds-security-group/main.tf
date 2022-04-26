@@ -1,8 +1,8 @@
 resource "aws_security_group" "this" {
   description = var.description
-  name        = join("-", distinct(concat(var.namespace, [var.name])))
+  name        = var.name
   tags        = var.tags
-  vpc_id      = var.vpc.id
+  vpc_id      = var.vpc_id
 
   lifecycle {
     create_before_destroy = true
@@ -10,14 +10,14 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_security_group_rule" "ingress_security_groups" {
-  count = length(var.allowed_security_groups)
+  count = length(var.allowed_security_group_ids)
 
   security_group_id = aws_security_group.this.id
 
   from_port                = var.port
   to_port                  = var.port
   protocol                 = "tcp"
-  source_security_group_id = element(var.allowed_security_groups, count.index).id
+  source_security_group_id = element(var.allowed_security_group_ids, count.index)
   type                     = "ingress"
 }
 
@@ -34,14 +34,14 @@ resource "aws_security_group_rule" "ingress_cidr_blocks" {
 }
 
 resource "aws_security_group_rule" "egress_security_groups" {
-  count = length(var.allowed_security_groups)
+  count = length(var.allowed_security_group_ids)
 
   security_group_id = aws_security_group.this.id
 
   from_port                = var.port
   to_port                  = var.port
   protocol                 = "tcp"
-  source_security_group_id = element(var.allowed_security_groups, count.index).id
+  source_security_group_id = element(var.allowed_security_group_ids, count.index)
   type                     = "egress"
 }
 
