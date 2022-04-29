@@ -41,6 +41,11 @@ variable "read_principals" {
   default     = null
 }
 
+variable "rotation_role_name" {
+  description = "IAM role name for the admin rotation role"
+  type        = string
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string
