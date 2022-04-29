@@ -1,5 +1,5 @@
 resource "aws_elasticache_replication_group" "this" {
-  replication_group_id = coalesce(var.replication_group_id, local.name)
+  replication_group_id = coalesce(var.replication_group_id, var.name)
 
   at_rest_encryption_enabled    = var.at_rest_encryption_enabled
   automatic_failover_enabled    = local.replica_enabled
@@ -34,7 +34,7 @@ resource "aws_elasticache_subnet_group" "this" {
   name = coalesce(
     var.subnet_group_name,
     var.replication_group_id,
-    local.name
+    var.name
   )
 
   description = "Redis subnet group"
@@ -46,16 +46,15 @@ resource "aws_elasticache_subnet_group" "this" {
 }
 
 module "security_group" {
-  source = "../rds-security-group"
+  source = "../../rds-security-group"
 
-  allowed_cidr_blocks     = var.allowed_cidr_blocks
-  allowed_security_groups = var.allowed_security_groups
-  description             = "Redis security group"
-  name                    = join("-", [var.name, "redis"])
-  namespace               = var.namespace
-  port                    = var.port
-  tags                    = var.tags
-  vpc                     = var.vpc
+  allowed_cidr_blocks        = var.allowed_cidr_blocks
+  allowed_security_group_ids = var.allowed_security_group_ids
+  description                = "Redis security group"
+  name                       = "${var.name}-redis"
+  port                       = var.port
+  tags                       = var.tags
+  vpc_id                     = var.vpc_id
 }
 
 resource "aws_security_group_rule" "intracluster" {
@@ -71,7 +70,7 @@ resource "aws_security_group_rule" "intracluster" {
 resource "random_password" "auth_token" {
   keepers = {
     # Generate a new auth token if we create a new replication group
-    replication_group_id = coalesce(var.replication_group_id, local.name)
+    replication_group_id = coalesce(var.replication_group_id, var.name)
   }
 
   length = 32
@@ -83,8 +82,8 @@ resource "random_password" "auth_token" {
 resource "aws_cloudwatch_metric_alarm" "cpu" {
   count = local.instance_count
 
-  alarm_name          = "${local.name}-${count.index}-high-cpu"
-  alarm_description   = "${local.name}-${count.index} is using more than 90% of its CPU"
+  alarm_name          = "${var.name}-${count.index}-high-cpu"
+  alarm_description   = "${var.name}-${count.index} is using more than 90% of its CPU"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "5"
   metric_name         = "CPUUtilization"
@@ -105,8 +104,8 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
 resource "aws_cloudwatch_metric_alarm" "memory" {
   count = local.instance_count
 
-  alarm_name          = "${local.name}-${count.index}-datababase-memory-remaining"
-  alarm_description   = "${local.name}-${count.index} has less than ${local.memory_threshold_mb}MiB of memory remaining"
+  alarm_name          = "${var.name}-${count.index}-datababase-memory-remaining"
+  alarm_description   = "${var.name}-${count.index} has less than ${local.memory_threshold_mb}MiB of memory remaining"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = "2"
   metric_name         = "FreeableMemory"
@@ -128,7 +127,6 @@ locals {
   instance_count  = var.replica_count + 1
   instances       = sort(aws_elasticache_replication_group.this.member_clusters)
   instance_size   = split(".", var.node_type)[2]
-  name            = join("-", distinct(concat(var.namespace, [var.name])))
   replica_enabled = var.replica_count > 0
 
   instance_size_thresholds = {

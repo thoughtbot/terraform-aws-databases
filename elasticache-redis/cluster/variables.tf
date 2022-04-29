@@ -4,9 +4,9 @@ variable "alarm_actions" {
   default     = []
 }
 
-variable "allowed_security_groups" {
+variable "allowed_security_group_ids" {
   description = "Security group allowed to access the database"
-  type        = list(object({ id = string }))
+  type        = list(string)
   default     = []
 }
 
@@ -53,12 +53,6 @@ variable "name" {
 variable "node_type" {
   type        = string
   description = "Node type for the Elasticache instance"
-}
-
-variable "namespace" {
-  type        = list(string)
-  default     = []
-  description = "Prefix to be applied to created resources"
 }
 
 variable "parameter_group_name" {
@@ -114,7 +108,8 @@ variable "transit_encryption_enabled" {
   default     = true
 }
 
-variable "vpc" {
-  description = "VPC for the database instance"
-  type        = object({ id = string })
+variable "vpc_id" {
+  type        = string
+  description = "ID of VPC for this cluster. One of vpc_id or vpc_security_group_ids is required"
+  default     = null
 }
