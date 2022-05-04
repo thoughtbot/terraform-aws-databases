@@ -16,6 +16,7 @@ fmt:
 
 .PHONY: layers
 layers: \
+	elasticache-redis/auth-token/rotation/redis.zip \
 	rds-postgres/admin-login/rotation/postgres.zip \
 	rds-postgres/user-login/rotation/postgres.zip
 
@@ -46,6 +47,9 @@ clean: $(CLEANMODULES)
 	echo 'plugin_cache_dir = "$(CURDIR)/.terraform-plugins"' > .terraformrc
 
 %/postgres.zip: layers/postgres/package.zip
+	cp "$<" "$@"
+
+%/redis.zip: layers/redis/package.zip
 	cp "$<" "$@"
 
 layers/%/package.zip: layers/%/*
