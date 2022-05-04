@@ -41,8 +41,7 @@ variable "engine" {
 
 variable "engine_version" {
   type        = string
-  description = "Version for RDS database engine; defaults to Redis 5.0"
-  default     = "5.0.6"
+  description = "Version for RDS database engine"
 }
 
 variable "name" {
