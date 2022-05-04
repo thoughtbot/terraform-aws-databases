@@ -45,7 +45,7 @@ Provision a Redis cluster using AWS ElastiCache.
 | <a name="input_at_rest_encryption_enabled"></a> [at\_rest\_encryption\_enabled](#input\_at\_rest\_encryption\_enabled) | Set to false to disable encryption at rest | `bool` | `true` | no |
 | <a name="input_description"></a> [description](#input\_description) | Human-readable description for this replication group | `string` | n/a | yes |
 | <a name="input_engine"></a> [engine](#input\_engine) | Elasticache database engine; defaults to Redis | `string` | `"redis"` | no |
-| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine; defaults to Redis 5.0 | `string` | `"5.0.6"` | no |
+| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | Custom KMS key to encrypt data at rest | `object({ arn = string })` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name for this cluster | `string` | n/a | yes |
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | Node type for the Elasticache instance | `string` | n/a | yes |
@@ -64,9 +64,8 @@ Provision a Redis cluster using AWS ElastiCache.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_id"></a> [id](#output\_id) | ID of the created replication group |
+| <a name="output_initial_auth_token"></a> [initial\_auth\_token](#output\_initial\_auth\_token) | Initial value for the user auth token |
 | <a name="output_instance"></a> [instance](#output\_instance) | Elasticache Redis replication group |
-| <a name="output_policies"></a> [policies](#output\_policies) | Required IAM policies |
-| <a name="output_redis_url"></a> [redis\_url](#output\_redis\_url) | URL for connecting to Redis |
-| <a name="output_secret_data"></a> [secret\_data](#output\_secret\_data) | Kubernetes secret data |
-| <a name="output_security_group"></a> [security\_group](#output\_security\_group) | Security group for this Redis instance |
+| <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | ID of the security group for this Redis instance |
 <!-- END_TF_DOCS -->
