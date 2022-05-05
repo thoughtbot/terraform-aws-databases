@@ -116,6 +116,12 @@ variable "skip_final_snapshot" {
   default     = false
 }
 
+variable "snapshot_identifier" {
+  description = "Set this to create the database from an existing snapshot"
+  type        = string
+  default     = null
+}
+
 variable "storage_encrypted" {
   type        = bool
   default     = true

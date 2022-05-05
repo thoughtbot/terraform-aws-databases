@@ -69,6 +69,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_publicly_accessible"></a> [publicly\_accessible](#input\_publicly\_accessible) | Set to true to access this database outside the VPC | `bool` | `false` | no |
 | <a name="input_security_group_name"></a> [security\_group\_name](#input\_security\_group\_name) | Override the name for the security group; defaults to identifer | `string` | `""` | no |
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | Set to true to skip a snapshot when destroying | `bool` | `false` | no |
+| <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | Set this to create the database from an existing snapshot | `string` | `null` | no |
 | <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | Set to false to disable on-disk encryption | `bool` | `true` | no |
 | <a name="input_subnet_group_description"></a> [subnet\_group\_description](#input\_subnet\_group\_description) | Set a description for the subnet group | `string` | `"Postgres subnet group"` | no |
 | <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Name of the RDS subnet group (defaults to identifier) | `string` | `null` | no |

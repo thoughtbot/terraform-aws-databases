@@ -17,6 +17,7 @@ resource "aws_db_instance" "this" {
   performance_insights_enabled = var.performance_insights_enabled
   publicly_accessible          = var.publicly_accessible
   skip_final_snapshot          = var.skip_final_snapshot
+  snapshot_identifier          = var.snapshot_identifier
   storage_encrypted            = var.storage_encrypted
   tags                         = var.tags
   username                     = var.admin_username
