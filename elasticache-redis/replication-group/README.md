@@ -49,6 +49,7 @@ Provision a Redis cluster using AWS ElastiCache.
 | <a name="input_description"></a> [description](#input\_description) | Human-readable description for this replication group | `string` | n/a | yes |
 | <a name="input_engine"></a> [engine](#input\_engine) | Elasticache database engine; defaults to Redis | `string` | `"redis"` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |
+| <a name="input_initial_auth_token"></a> [initial\_auth\_token](#input\_initial\_auth\_token) | Override the initial auth token | `string` | `null` | no |
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | Custom KMS key to encrypt data at rest | `object({ arn = string })` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name for this cluster | `string` | n/a | yes |
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | Node type for the Elasticache instance | `string` | n/a | yes |

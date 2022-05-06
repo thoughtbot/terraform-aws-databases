@@ -32,6 +32,12 @@ variable "engine_version" {
   description = "Version for RDS database engine"
 }
 
+variable "initial_auth_token" {
+  type        = string
+  description = "Override the initial auth token"
+  default     = null
+}
+
 variable "name" {
   type        = string
   description = "Name for this cluster"

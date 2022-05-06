@@ -20,7 +20,7 @@ resource "aws_elasticache_replication_group" "this" {
   # Auth tokens aren't supported without TLS
   auth_token = (
     var.transit_encryption_enabled ?
-    random_password.auth_token.result :
+    coalesce(var.initial_auth_token, random_password.auth_token.result) :
     null
   )
 
