@@ -74,5 +74,5 @@ data "aws_db_instance" "this" {
 }
 
 locals {
-  full_name = join("-", ["rds-postgres", var.identifier, var.username])
+  full_name = join("-", ["rds-postgres", var.identifier])
 }
