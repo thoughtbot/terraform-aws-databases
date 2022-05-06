@@ -24,7 +24,7 @@ Provision a Postgres database using AWS RDS.
 |------|--------|---------|
 | <a name="module_alarms"></a> [alarms](#module\_alarms) | ../cloudwatch-alarms |  |
 | <a name="module_parameter_group"></a> [parameter\_group](#module\_parameter\_group) | ../parameter-group |  |
-| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | ../../rds-security-group |  |
+| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | ../../security-group |  |
 
 ## Resources
 

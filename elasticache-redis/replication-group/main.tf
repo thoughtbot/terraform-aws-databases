@@ -50,15 +50,18 @@ resource "aws_elasticache_subnet_group" "this" {
 }
 
 module "security_group" {
-  source = "../../rds-security-group"
+  source = "../../security-group"
 
   allowed_cidr_blocks        = var.allowed_cidr_blocks
   allowed_security_group_ids = var.allowed_security_group_ids
-  description                = "Redis security group"
+  description                = "ElastiCache Redis: ${var.name}"
   name                       = "${var.name}-redis"
-  port                       = var.port
   tags                       = var.tags
   vpc_id                     = var.vpc_id
+
+  ports = {
+    redis = var.port
+  }
 }
 
 resource "aws_security_group_rule" "intracluster" {

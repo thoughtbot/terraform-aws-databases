@@ -22,7 +22,7 @@ Provision a Redis cluster using AWS ElastiCache.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | ../../rds-security-group |  |
+| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | ../../security-group |  |
 
 ## Resources
 

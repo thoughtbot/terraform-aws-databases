@@ -68,13 +68,19 @@ module "parameter_group" {
 
 module "security_group" {
   count  = var.create_security_group ? 1 : 0
-  source = "../../rds-security-group"
+  source = "../../security-group"
 
   allowed_cidr_blocks        = var.allowed_cidr_blocks
   allowed_security_group_ids = var.allowed_security_group_ids
+  description                = "RDS Postgres: ${var.identifier}"
   name                       = coalesce(var.security_group_name, var.identifier)
+  randomize_name             = var.security_group_name == ""
   tags                       = var.tags
   vpc_id                     = var.vpc_id
+
+  ports = {
+    postgres = 5432
+  }
 }
 
 module "alarms" {

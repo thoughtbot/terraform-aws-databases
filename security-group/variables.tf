@@ -1,3 +1,9 @@
+variable "allow_all_egress" {
+  description = "Set to true to allow all egress traffic"
+  type        = bool
+  default     = false
+}
+
 variable "allowed_security_group_ids" {
   description = "Security group allowed to access the database"
   type        = list(string)
@@ -13,19 +19,23 @@ variable "allowed_cidr_blocks" {
 variable "description" {
   description = "Security group used by the database instance"
   type        = string
-  default     = "Postgres security group"
 }
 
 variable "name" {
   type        = string
-  default     = "postgres"
   description = "Name of the security group"
 }
 
-variable "port" {
-  type        = number
-  description = "Port on which to listen"
-  default     = 5432
+variable "ports" {
+  type        = map(number)
+  description = "Ports on which to listen"
+  default     = {}
+}
+
+variable "randomize_name" {
+  type        = bool
+  description = "Set to false to avoid a randomized suffix"
+  default     = true
 }
 
 variable "tags" {

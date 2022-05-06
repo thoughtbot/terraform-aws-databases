@@ -25,7 +25,7 @@ module "rotation" {
   role_arn           = module.secret.rotation_role_arn
   runtime            = "python3.8"
   secret_arn         = module.secret.arn
-  security_group_ids = [aws_security_group.function.id]
+  security_group_ids = [module.security_group.id]
   source_file        = "${path.module}/rotation/lambda_function.py"
   subnet_ids         = var.subnet_ids
 
@@ -34,21 +34,14 @@ module "rotation" {
   }
 }
 
-resource "aws_security_group" "function" {
-  description = "Security group for rotating ${local.full_name}"
-  name        = "${var.identifier}-rotation"
-  tags        = var.tags
-  vpc_id      = var.vpc_id
-}
+module "security_group" {
+  source = "../../security-group"
 
-resource "aws_security_group_rule" "function_egress" {
-  cidr_blocks       = ["0.0.0.0/0"]
-  description       = "Allow all egress"
-  from_port         = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.function.id
-  to_port           = 0
-  type              = "egress"
+  allow_all_egress = true
+  description      = "Security group for rotating ${local.full_name}"
+  name             = "${local.full_name}-rotation"
+  tags             = var.tags
+  vpc_id           = var.vpc_id
 }
 
 resource "aws_iam_role_policy_attachment" "access_admin_login" {
