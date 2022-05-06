@@ -2,7 +2,7 @@ module "secret" {
   source = "github.com/thoughtbot/terraform-aws-secrets//secret?ref=v0.2.0"
 
   admin_principals = var.admin_principals
-  description      = "Admin Postgres password for: ${local.full_name}"
+  description      = "Postgres password for: ${local.full_name}"
   name             = coalesce(var.secret_name, local.full_name)
   read_principals  = var.read_principals
   resource_tags    = var.tags
@@ -31,6 +31,11 @@ module "rotation" {
 
   dependencies = {
     postgres = "${path.module}/rotation/postgres.zip"
+  }
+
+  variables = {
+    ALTERNATE_USERNAME = coalesce(var.alternate_username, "${var.username}_alt")
+    PRIMARY_USERNAME   = var.username
   }
 }
 
@@ -69,5 +74,5 @@ data "aws_db_instance" "this" {
 }
 
 locals {
-  full_name = join("-", ["rds-postgres", var.identifier, var.username])
+  full_name = join("-", ["rds-postgres", var.identifier])
 }

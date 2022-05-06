@@ -1,7 +1,6 @@
 # Based on the template provided by Amazon:
 # https://github.com/aws-samples/aws-secrets-manager-rotation-lambdas
 
-import re
 import boto3
 import json
 import logging
@@ -12,12 +11,18 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
+ALTERNATE_USERNAME = os.environ['ALTERNATE_USERNAME']
+PRIMARY_USERNAME = os.environ['PRIMARY_USERNAME']
+
+
 def lambda_handler(event, context):
     """Secrets Manager RDS PostgreSQL Handler
 
-    This handler uses the single-user rotation scheme to rotate an RDS PostgreSQL user credential. This rotation
-    scheme logs into the database as the user and rotates the user's own password, immediately invalidating the
-    user's previous password.
+    This handler uses the primary-alt rotation scheme to rotate an RDS
+    PostgreSQL user credential. Each rotation alternates between the primary
+    username and the alternate username, updating the password each time. If the
+    alternate user don't already exist, they will be created when the password
+    is rotated for the first time.
 
     The Secret SecretString is expected to be a JSON string with the following format:
     {
@@ -113,6 +118,9 @@ def create_secret(service_client, arn, token):
         get_secret_dict(service_client, arn, "AWSPENDING", token)
         logger.info("createSecret: Successfully retrieved secret for %s." % arn)
     except service_client.exceptions.ResourceNotFoundException:
+        # Get the next username swapping between primary and alternate
+        current_dict['username'] = get_alt_username(current_dict['username'])
+
         # Generate a random password
         passwd = service_client.get_random_password(ExcludePunctuation=True)
         current_dict['password'] = passwd['RandomPassword']
@@ -128,9 +136,11 @@ def create_secret(service_client, arn, token):
 def set_secret(service_client, arn, token):
     """Set the pending secret in the database
 
-    This method tries to login to the database with the AWSPENDING secret and returns on success. If that fails, it
-    tries to login with the AWSCURRENT and AWSPREVIOUS secrets. If either one succeeds, it sets the AWSPENDING password
-    as the user password in the database. Else, it throws a ValueError.
+    This method tries to login to the database with the AWSPENDING secret and
+    returns on success. If that fails, it tries to login with the credentials in
+    the current secret. If this succeeds, it adds all grants for AWSCURRENT user
+    to the AWSPENDING user, creating the user and/or setting the password in the
+    process. Else, it throws a ValueError.
 
     Args:
         service_client (client): The secrets manager service client
@@ -147,10 +157,6 @@ def set_secret(service_client, arn, token):
         KeyError: If the secret json does not contain the expected keys
 
     """
-    try:
-        previous_dict = get_secret_dict(service_client, arn, "AWSPREVIOUS")
-    except (service_client.exceptions.ResourceNotFoundException, KeyError):
-        previous_dict = None
     current_dict = get_secret_dict(service_client, arn, "AWSCURRENT")
     pending_dict = get_secret_dict(service_client, arn, "AWSPENDING", token)
 
@@ -162,51 +168,43 @@ def set_secret(service_client, arn, token):
         return
 
     # Make sure the user from current and pending match
-    if current_dict['username'] != pending_dict['username']:
-        logger.error("setSecret: Attempting to modify user %s other than current user %s" % (pending_dict['username'], current_dict['username']))
-        raise ValueError("Attempting to modify user %s other than current user %s" % (pending_dict['username'], current_dict['username']))
+    if get_alt_username(current_dict['username']) != pending_dict['username']:
+        logger.error("setSecret: Attempting to modify user %s other than current user alternate %s" % (pending_dict['username'], get_alt_username(current_dict['username'])))
+        raise ValueError("Attempting to modify user %s other than current user alternate %s" % (pending_dict['username'], get_alt_username(current_dict['username'])))
 
     # Make sure the host from current and pending match
     if current_dict['host'] != pending_dict['host']:
         logger.error("setSecret: Attempting to modify user for host %s other than current host %s" % (pending_dict['host'], current_dict['host']))
         raise ValueError("Attempting to modify user for host %s other than current host %s" % (pending_dict['host'], current_dict['host']))
 
-    # Now try the current password
+    # Log in with the current credentials
     conn = get_connection(current_dict)
-
-    # If both current and pending do not work, try previous
-    if not conn and previous_dict:
-        # Update previous_dict to leverage current SSL settings
-        previous_dict.pop('ssl', None)
-        if 'ssl' in current_dict:
-            previous_dict['ssl'] = current_dict['ssl']
-
-        conn = get_connection(previous_dict)
-
-        # Make sure the user/host from previous and pending match
-        if previous_dict['username'] != pending_dict['username']:
-            logger.error("setSecret: Attempting to modify user %s other than previous valid user %s" % (pending_dict['username'], previous_dict['username']))
-            raise ValueError("Attempting to modify user %s other than previous valid user %s" % (pending_dict['username'], previous_dict['username']))
-        if previous_dict['host'] != pending_dict['host']:
-            logger.error("setSecret: Attempting to modify user for host %s other than previous valid host %s" % (pending_dict['host'], previous_dict['host']))
-            raise ValueError("Attempting to modify user for host %s other than current previous valid %s" % (pending_dict['host'], previous_dict['host']))
-
-    # If we still don't have a connection, raise a ValueError
     if not conn:
-        logger.error("setSecret: Unable to log into database with previous, current, or pending secret of secret arn %s" % arn)
-        raise ValueError("Unable to log into database with previous, current, or pending secret of secret arn %s" % arn)
+        logger.error("setSecret: Unable to log into database using current credentials for secret %s" % arn)
+        raise ValueError("Unable to log into database using current credentials for secret %s" % arn)
 
-    # Now set the password to the pending password
+    # Set the password to the pending password
     try:
         with conn.cursor() as cur:
-            # Get escaped username via quote_ident
+            # Get escaped usernames via quote_ident
             cur.execute("SELECT quote_ident(%s)", (pending_dict['username'],))
-            escaped_username = cur.fetchone()[0]
+            pending_username = cur.fetchone()[0]
+            cur.execute("SELECT quote_ident(%s)", (current_dict['username'],))
+            current_username = cur.fetchone()[0]
 
-            alter_role = "ALTER USER %s" % escaped_username
-            cur.execute(alter_role + " WITH PASSWORD %s", (pending_dict['password'],))
+            # Check if the user exists, if not create it and grant it all
+            # permissions from the current role. If the user exists, just update
+            # the password.
+            cur.execute("SELECT 1 FROM pg_roles where rolname = %s", (pending_dict['username'],))
+            if len(cur.fetchall()) == 0:
+                create_role = "CREATE ROLE %s" % pending_username
+                cur.execute(create_role + " WITH LOGIN PASSWORD %s", (pending_dict['password'],))
+                cur.execute("GRANT %s TO %s" % (current_username, pending_username))
+            else:
+                alter_role = "ALTER USER %s" % pending_username
+                cur.execute(alter_role + " WITH PASSWORD %s", (pending_dict['password'],))
             conn.commit()
-            logger.info("setSecret: Successfully set password for user %s in PostgreSQL DB for secret arn %s." % (pending_dict['username'], arn))
+            logger.info("setSecret: Successfully set password for %s in PostgreSQL DB for secret arn %s." % (pending_dict['username'], arn))
     finally:
         conn.close()
 
@@ -369,3 +367,27 @@ def get_secret_dict(service_client, arn, stage, token=None):
 
     # Parse and return the secret JSON string
     return secret_dict
+
+
+def get_alt_username(current_username):
+    """Gets the alternate username for the current_username passed in
+
+    This helper function gets the username for the alternate user based on the
+    passed in current username.
+
+    Args:
+        current_username (client): The current username
+
+    Returns:
+        AlternateUsername: Alternate username
+
+    Raises:
+        ValueError: If the new username length would exceed the maximum allowed
+
+    """
+    if current_username == PRIMARY_USERNAME:
+        return ALTERNATE_USERNAME
+    elif current_username == ALTERNATE_USERNAME:
+        return PRIMARY_USERNAME
+    else:
+        raise ValueError("Current username is not the primary or alternate username")
