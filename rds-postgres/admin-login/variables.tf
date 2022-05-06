@@ -4,6 +4,12 @@ variable "admin_principals" {
   default     = null
 }
 
+variable "alternate_username" {
+  description = "Username for the alternate login used during rotation"
+  type        = string
+  default     = null
+}
+
 variable "database_name" {
   description = "Name of the database to connect to"
   type        = string
