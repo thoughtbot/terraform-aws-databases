@@ -21,17 +21,21 @@ module "secret" {
 module "rotation" {
   source = "github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.2.0"
 
-  handler            = "lambda_function.lambda_handler"
-  role_arn           = module.secret.rotation_role_arn
-  runtime            = "python3.8"
-  secret_arn         = module.secret.arn
-  security_group_ids = [module.security_group.id]
-  source_file        = "${path.module}/rotation/lambda_function.py"
-  subnet_ids         = var.subnet_ids
+  handler     = "lambda_function.lambda_handler"
+  role_arn    = module.secret.rotation_role_arn
+  runtime     = "python3.8"
+  secret_arn  = module.secret.arn
+  source_file = "${path.module}/rotation/lambda_function.py"
+  subnet_ids  = var.subnet_ids
 
   dependencies = {
     postgres = "${path.module}/rotation/postgres.zip"
   }
+
+  security_group_ids = concat(
+    var.security_group_ids,
+    [module.security_group.id]
+  )
 
   variables = {
     ALTERNATE_USERNAME = coalesce(var.alternate_username, "${var.username}_alt")

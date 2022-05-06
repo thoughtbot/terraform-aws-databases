@@ -37,6 +37,12 @@ variable "secret_name" {
   default     = null
 }
 
+variable "security_group_ids" {
+  description = "Security groups to attach to the rotation function"
+  type        = list(string)
+  default     = []
+}
+
 variable "subnet_ids" {
   description = "Subnets in which the rotation function should run"
   type        = list(string)
