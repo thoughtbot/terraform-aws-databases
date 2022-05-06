@@ -17,8 +17,7 @@ fmt:
 .PHONY: layers
 layers: \
 	elasticache-redis/auth-token/rotation/redis.zip \
-	rds-postgres/admin-login/rotation/postgres.zip \
-	rds-postgres/user-login/rotation/postgres.zip
+	rds-postgres/admin-login/rotation/postgres.zip
 
 .PHONY: modules
 modules: makefiles makemodules
