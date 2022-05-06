@@ -70,21 +70,42 @@ module "server_security_group" {
   count  = var.create_server_security_group ? 1 : 0
   source = "../../security-group"
 
-  allowed_cidr_blocks        = var.allowed_cidr_blocks
-  allowed_security_group_ids = var.allowed_security_group_ids
-  description                = "RDS Postgres: ${var.identifier}"
-  randomize_name             = var.server_security_group_name == ""
-  tags                       = var.tags
-  vpc_id                     = var.vpc_id
+  allowed_cidr_blocks = var.allowed_cidr_blocks
+  description         = "RDS Postgres server: ${var.identifier}"
+  randomize_name      = var.server_security_group_name == ""
+  tags                = var.tags
+  vpc_id              = var.vpc_id
+
+  allowed_security_group_ids = concat(
+    var.allowed_security_group_ids,
+    module.client_security_group.*.id
+  )
 
   name = coalesce(
     var.server_security_group_name,
-    var.identifier
+    "${var.identifier}-server"
   )
 
   ports = {
     postgres = 5432
   }
+}
+
+module "client_security_group" {
+  count  = var.create_client_security_group ? 1 : 0
+  source = "../../security-group"
+
+  allowed_cidr_blocks        = var.allowed_cidr_blocks
+  allowed_security_group_ids = var.allowed_security_group_ids
+  description                = "RDS Postgres client: ${var.identifier}"
+  randomize_name             = var.client_security_group_name == ""
+  tags                       = var.tags
+  vpc_id                     = var.vpc_id
+
+  name = coalesce(
+    var.client_security_group_name,
+    "${var.identifier}-client"
+  )
 }
 
 module "alarms" {

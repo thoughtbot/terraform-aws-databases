@@ -182,6 +182,18 @@ variable "allowed_security_group_ids" {
   default     = []
 }
 
+variable "client_security_group_name" {
+  description = "Override the name for the security group; defaults to identifer"
+  type        = string
+  default     = ""
+}
+
+variable "create_client_security_group" {
+  type        = bool
+  description = "Set to false to only use existing security groups"
+  default     = true
+}
+
 variable "create_server_security_group" {
   type        = bool
   description = "Set to false to only use existing security groups"

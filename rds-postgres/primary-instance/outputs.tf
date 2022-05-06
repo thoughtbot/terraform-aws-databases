@@ -8,6 +8,11 @@ output "admin_username" {
   value       = local.username
 }
 
+output "client_security_group_id" {
+  description = "Name of the security group created for clients"
+  value       = join("", module.client_security_group.*.id)
+}
+
 output "default_database" {
   description = "Name of the default database, if created"
   value       = var.create_default_db ? var.default_database : null
@@ -31,4 +36,9 @@ output "initial_password" {
 output "instance" {
   description = "The created RDS database instance"
   value       = aws_db_instance.this
+}
+
+output "server_security_group_id" {
+  description = "Name of the security group created for the server"
+  value       = join("", module.server_security_group.*.id)
 }
