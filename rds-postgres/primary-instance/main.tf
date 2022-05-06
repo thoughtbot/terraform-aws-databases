@@ -21,7 +21,7 @@ resource "aws_db_instance" "this" {
   storage_encrypted            = var.storage_encrypted
   tags                         = var.tags
   username                     = var.admin_username
-  vpc_security_group_ids       = local.vpc_security_group_ids
+  vpc_security_group_ids       = local.server_security_group_ids
 
   final_snapshot_identifier = join(
     "-",
@@ -39,7 +39,7 @@ resource "aws_db_instance" "this" {
   depends_on = [
     aws_db_subnet_group.this,
     module.parameter_group,
-    module.security_group,
+    module.server_security_group,
   ]
 
   lifecycle {
@@ -66,17 +66,21 @@ module "parameter_group" {
   tags           = var.tags
 }
 
-module "security_group" {
-  count  = var.create_security_group ? 1 : 0
+module "server_security_group" {
+  count  = var.create_server_security_group ? 1 : 0
   source = "../../security-group"
 
   allowed_cidr_blocks        = var.allowed_cidr_blocks
   allowed_security_group_ids = var.allowed_security_group_ids
   description                = "RDS Postgres: ${var.identifier}"
-  name                       = coalesce(var.security_group_name, var.identifier)
-  randomize_name             = var.security_group_name == ""
+  randomize_name             = var.server_security_group_name == ""
   tags                       = var.tags
   vpc_id                     = var.vpc_id
+
+  name = coalesce(
+    var.server_security_group_name,
+    var.identifier
+  )
 
   ports = {
     postgres = 5432
@@ -103,8 +107,8 @@ resource "aws_db_subnet_group" "this" {
 }
 
 locals {
-  owned_vpc_security_group_ids  = module.security_group.*.id
-  shared_vpc_security_group_ids = var.vpc_security_group_ids
+  owned_vpc_security_group_ids  = module.server_security_group.*.id
+  shared_vpc_security_group_ids = var.server_security_group_ids
 
   parameter_group_name = coalesce(
     var.parameter_group_name,
@@ -116,7 +120,7 @@ locals {
     var.identifier
   )
 
-  vpc_security_group_ids = concat(
+  server_security_group_ids = concat(
     local.owned_vpc_security_group_ids,
     local.shared_vpc_security_group_ids
   )
