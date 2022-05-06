@@ -177,16 +177,13 @@ def set_secret(service_client, arn, token):
         logger.error("setSecret: Attempting to modify user for host %s other than current host %s" % (pending_dict['host'], current_dict['host']))
         raise ValueError("Attempting to modify user for host %s other than current host %s" % (pending_dict['host'], current_dict['host']))
 
-    # Before we do anything with the secret, make sure the AWSCURRENT secret is
-    # valid by logging in to the db This ensures that the credential we are
-    # rotating is valid to protect against a confused deputy attack
+    # Log in with the current credentials
     conn = get_connection(current_dict)
     if not conn:
         logger.error("setSecret: Unable to log into database using current credentials for secret %s" % arn)
         raise ValueError("Unable to log into database using current credentials for secret %s" % arn)
-    conn.close()
 
-    # Now set the password to the pending password
+    # Set the password to the pending password
     try:
         with conn.cursor() as cur:
             # Get escaped usernames via quote_ident
