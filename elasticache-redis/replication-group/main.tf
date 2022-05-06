@@ -12,7 +12,7 @@ resource "aws_elasticache_replication_group" "this" {
   parameter_group_name          = var.parameter_group_name
   port                          = var.port
   replication_group_description = var.description
-  security_group_ids            = [module.security_group.instance.id]
+  security_group_ids            = local.server_security_group_ids
   snapshot_retention_limit      = var.snapshot_retention_limit
   subnet_group_name             = aws_elasticache_subnet_group.this.name
   transit_encryption_enabled    = var.transit_encryption_enabled
@@ -49,29 +49,46 @@ resource "aws_elasticache_subnet_group" "this" {
   }
 }
 
-module "security_group" {
+module "server_security_group" {
+  count  = var.create_server_security_group ? 1 : 0
   source = "../../security-group"
 
-  allowed_cidr_blocks        = var.allowed_cidr_blocks
-  allowed_security_group_ids = var.allowed_security_group_ids
-  description                = "ElastiCache Redis: ${var.name}"
-  name                       = "${var.name}-redis"
-  tags                       = var.tags
-  vpc_id                     = var.vpc_id
+  allowed_cidr_blocks = var.allowed_cidr_blocks
+  description         = "ElastiCache Redis server: ${var.name}"
+  randomize_name      = var.server_security_group_name == ""
+  tags                = var.tags
+  vpc_id              = var.vpc_id
+
+  allowed_security_group_ids = concat(
+    var.allowed_security_group_ids,
+    module.client_security_group.*.id
+  )
+
+  name = coalesce(
+    var.server_security_group_name,
+    "${var.name}-server"
+  )
 
   ports = {
     redis = var.port
   }
 }
 
-resource "aws_security_group_rule" "intracluster" {
-  security_group_id = module.security_group.instance.id
+module "client_security_group" {
+  count  = var.create_client_security_group ? 1 : 0
+  source = "../../security-group"
 
-  from_port = 0
-  to_port   = 0
-  protocol  = "-1"
-  self      = true
-  type      = "ingress"
+  allowed_cidr_blocks        = var.allowed_cidr_blocks
+  allowed_security_group_ids = var.allowed_security_group_ids
+  description                = "ElastiCache Redis client: ${var.name}"
+  randomize_name             = var.client_security_group_name == ""
+  tags                       = var.tags
+  vpc_id                     = var.vpc_id
+
+  name = coalesce(
+    var.client_security_group_name,
+    "${var.name}-client"
+  )
 }
 
 resource "random_password" "auth_token" {
@@ -131,10 +148,12 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
 }
 
 locals {
-  instance_count  = var.replica_count + 1
-  instances       = sort(aws_elasticache_replication_group.this.member_clusters)
-  instance_size   = split(".", var.node_type)[2]
-  replica_enabled = var.replica_count > 0
+  instance_count            = var.replica_count + 1
+  instance_size             = split(".", var.node_type)[2]
+  instances                 = sort(aws_elasticache_replication_group.this.member_clusters)
+  owned_security_group_ids  = module.server_security_group.*.id
+  replica_enabled           = var.replica_count > 0
+  shared_security_group_ids = var.server_security_group_ids
 
   instance_size_thresholds = {
     micro = 128
@@ -144,5 +163,10 @@ locals {
   memory_threshold_mb = try(
     local.instance_size_thresholds[local.instance_size],
     1024
+  )
+
+  server_security_group_ids = concat(
+    local.owned_security_group_ids,
+    local.shared_security_group_ids
   )
 }

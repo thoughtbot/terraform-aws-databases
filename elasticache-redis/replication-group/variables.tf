@@ -4,18 +4,6 @@ variable "alarm_actions" {
   default     = []
 }
 
-variable "allowed_security_group_ids" {
-  description = "Security group allowed to access the database"
-  type        = list(string)
-  default     = []
-}
-
-variable "allowed_cidr_blocks" {
-  description = "CIDR blocks allowed to access the database"
-  type        = list(string)
-  default     = []
-}
-
 variable "at_rest_encryption_enabled" {
   description = "Set to false to disable encryption at rest"
   type        = bool
@@ -107,8 +95,52 @@ variable "transit_encryption_enabled" {
   default     = true
 }
 
+# Security group variables
+
+variable "allowed_cidr_blocks" {
+  description = "CIDR blocks allowed to access the database"
+  type        = list(string)
+  default     = []
+}
+
+variable "allowed_security_group_ids" {
+  description = "Security group allowed to access the database"
+  type        = list(string)
+  default     = []
+}
+
+variable "client_security_group_name" {
+  description = "Override the name for the security group; defaults to identifer"
+  type        = string
+  default     = ""
+}
+
+variable "create_client_security_group" {
+  type        = bool
+  description = "Set to false to only use existing security groups"
+  default     = true
+}
+
+variable "create_server_security_group" {
+  type        = bool
+  description = "Set to false to only use existing security groups"
+  default     = true
+}
+
+variable "server_security_group_ids" {
+  type        = list(string)
+  description = "IDs of VPC security groups for this instance. One of vpc_id or server_security_group_ids is required"
+  default     = []
+}
+
+variable "server_security_group_name" {
+  description = "Override the name for the security group; defaults to identifer"
+  type        = string
+  default     = ""
+}
+
 variable "vpc_id" {
   type        = string
-  description = "ID of VPC for this cluster. One of vpc_id or vpc_security_group_ids is required"
+  description = "ID of VPC for this instance. One of vpc_id or vpc_security_group_ids is required"
   default     = null
 }
