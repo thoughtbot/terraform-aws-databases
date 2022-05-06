@@ -182,13 +182,31 @@ variable "allowed_security_group_ids" {
   default     = []
 }
 
-variable "create_security_group" {
+variable "client_security_group_name" {
+  description = "Override the name for the security group; defaults to identifer"
+  type        = string
+  default     = ""
+}
+
+variable "create_client_security_group" {
   type        = bool
   description = "Set to false to only use existing security groups"
   default     = true
 }
 
-variable "security_group_name" {
+variable "create_server_security_group" {
+  type        = bool
+  description = "Set to false to only use existing security groups"
+  default     = true
+}
+
+variable "server_security_group_ids" {
+  type        = list(string)
+  description = "IDs of VPC security groups for this instance. One of vpc_id or server_security_group_ids is required"
+  default     = []
+}
+
+variable "server_security_group_name" {
   description = "Override the name for the security group; defaults to identifer"
   type        = string
   default     = ""
@@ -198,12 +216,6 @@ variable "vpc_id" {
   type        = string
   description = "ID of VPC for this instance. One of vpc_id or vpc_security_group_ids is required"
   default     = null
-}
-
-variable "vpc_security_group_ids" {
-  type        = list(string)
-  description = "IDs of VPC security groups for this instance. One of vpc_id or vpc_security_group_ids is required"
-  default     = []
 }
 
 # Subnet group variables
