@@ -13,6 +13,7 @@ resource "aws_elasticache_replication_group" "this" {
   port                          = var.port
   replication_group_description = var.description
   security_group_ids            = local.server_security_group_ids
+  snapshot_name                 = var.snapshot_name
   snapshot_retention_limit      = var.snapshot_retention_limit
   subnet_group_name             = aws_elasticache_subnet_group.this.name
   transit_encryption_enabled    = var.transit_encryption_enabled

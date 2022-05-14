@@ -72,6 +72,12 @@ variable "replication_group_id" {
   default     = ""
 }
 
+variable "snapshot_name" {
+  description = "Name of an existing snapshot from which to create a cluster"
+  type        = string
+  default     = null
+}
+
 variable "snapshot_retention_limit" {
   description = "Number of days to retain snapshots"
   type        = number
