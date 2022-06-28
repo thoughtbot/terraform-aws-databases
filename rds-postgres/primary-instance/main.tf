@@ -9,6 +9,7 @@ resource "aws_db_instance" "this" {
   engine_version               = var.engine_version
   identifier                   = var.identifier
   instance_class               = var.instance_class
+  iops                         = var.iops
   kms_key_id                   = var.kms_key_id
   maintenance_window           = var.maintenance_window
   max_allocated_storage        = var.max_allocated_storage
@@ -19,6 +20,7 @@ resource "aws_db_instance" "this" {
   skip_final_snapshot          = var.skip_final_snapshot
   snapshot_identifier          = var.snapshot_identifier
   storage_encrypted            = var.storage_encrypted
+  storage_type                 = var.storage_type
   tags                         = var.tags
   username                     = var.admin_username
   vpc_security_group_ids       = local.server_security_group_ids
