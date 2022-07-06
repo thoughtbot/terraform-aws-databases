@@ -15,17 +15,17 @@ Provision a Postgres database using AWS RDS.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 3.45 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.75.2 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.3.2 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_alarms"></a> [alarms](#module\_alarms) | ../cloudwatch-alarms |  |
-| <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group |  |
-| <a name="module_parameter_group"></a> [parameter\_group](#module\_parameter\_group) | ../parameter-group |  |
-| <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group |  |
+| <a name="module_alarms"></a> [alarms](#module\_alarms) | ../cloudwatch-alarms | n/a |
+| <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group | n/a |
+| <a name="module_parameter_group"></a> [parameter\_group](#module\_parameter\_group) | ../parameter-group | n/a |
+| <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group | n/a |
 
 ## Resources
 
@@ -63,6 +63,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_identifier"></a> [identifier](#input\_identifier) | Unique identifier for this database | `string` | n/a | yes |
 | <a name="input_initial_password"></a> [initial\_password](#input\_initial\_password) | Override the initial password for the admin user | `string` | `""` | no |
 | <a name="input_instance_class"></a> [instance\_class](#input\_instance\_class) | Tier for the database instance | `string` | n/a | yes |
+| <a name="input_iops"></a> [iops](#input\_iops) | The amount of provisioned IOPS. Required if storage type is `io1` | `number` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | KMS key to encrypt data at rest | `string` | `null` | no |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | UTC day/time range during which maintenance can be performed, such as Mon:00:00-Mon:03:00 | `string` | `null` | no |
 | <a name="input_max_allocated_storage"></a> [max\_allocated\_storage](#input\_max\_allocated\_storage) | Maximum size GB after autoscaling | `number` | `0` | no |
@@ -75,6 +76,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_skip_final_snapshot"></a> [skip\_final\_snapshot](#input\_skip\_final\_snapshot) | Set to true to skip a snapshot when destroying | `bool` | `false` | no |
 | <a name="input_snapshot_identifier"></a> [snapshot\_identifier](#input\_snapshot\_identifier) | Set this to create the database from an existing snapshot | `string` | `null` | no |
 | <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | Set to false to disable on-disk encryption | `bool` | `true` | no |
+| <a name="input_storage_type"></a> [storage\_type](#input\_storage\_type) | Storage type for the EBS volume. One of `standard` (magnetic), `gp2` (general purpose SSD), or `io1` (provisioned IOPS SSD) | `string` | `"gp2"` | no |
 | <a name="input_subnet_group_description"></a> [subnet\_group\_description](#input\_subnet\_group\_description) | Set a description for the subnet group | `string` | `"Postgres subnet group"` | no |
 | <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Name of the RDS subnet group (defaults to identifier) | `string` | `null` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets connected to the database; required if creating a subnet group | `list(string)` | `null` | no |

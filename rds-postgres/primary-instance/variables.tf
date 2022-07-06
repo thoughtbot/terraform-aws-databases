@@ -74,6 +74,12 @@ variable "instance_class" {
   type        = string
 }
 
+variable "iops" {
+  description = "The amount of provisioned IOPS. Required if storage type is `io1`"
+  type        = number
+  default     = null
+}
+
 variable "kms_key_id" {
   description = "KMS key to encrypt data at rest"
   type        = string
@@ -126,6 +132,12 @@ variable "storage_encrypted" {
   type        = bool
   default     = true
   description = "Set to false to disable on-disk encryption"
+}
+
+variable "storage_type" {
+  type        = string
+  default     = "gp2"
+  description = "Storage type for the EBS volume. One of `standard` (magnetic), `gp2` (general purpose SSD), or `io1` (provisioned IOPS SSD)"
 }
 
 variable "tags" {
