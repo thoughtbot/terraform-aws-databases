@@ -121,7 +121,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
   namespace           = "AWS/ElastiCache"
   period              = "60"
   statistic           = "Average"
-  threshold           = "90"
+  threshold           = 90 / data.aws_ec2_instance_type.instance_attributes.default_cores
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -154,6 +154,79 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
   ok_actions    = var.alarm_actions.*.arn
 }
 
+resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
+  count = data.aws_ec2_instance_type.instance_attributes.burstable_performance_supported == true ? local.instance_count : 0
+
+  alarm_name          = "${var.name}-${count.index}-elasticache-low-cpu-credit"
+  alarm_description   = "Insufficient CPU credits for ${var.name}-${count.index}"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  threshold           = "0"
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = var.alarm_actions.*.arn
+  ok_actions    = var.alarm_actions.*.arn
+
+  metric_query {
+    id          = "e1"
+    expression  = "m1 - m2 - (m3 * 12)"
+    label       = "Available CPU Credits"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "m1"
+
+    metric {
+      metric_name = "CPUCreditBalance"
+      namespace   = "AWS/ElastiCache"
+      period      = "120"
+      stat        = "Average"
+      unit        = "Count"
+
+      dimensions = {
+        CacheClusterId = local.instances[count.index]
+      }
+    }
+  }
+
+  metric_query {
+    id = "m2"
+
+    metric {
+      metric_name = "CPUSurplusCreditBalance"
+      namespace   = "AWS/ElastiCache"
+      period      = "120"
+      stat        = "Average"
+      unit        = "Count"
+
+      dimensions = {
+        CacheClusterId = local.instances[count.index]
+      }
+    }
+  }
+
+  metric_query {
+    id = "m3"
+
+    metric {
+      metric_name = "CPUCreditUsage"
+      namespace   = "AWS/ElastiCache"
+      period      = "120"
+      stat        = "Average"
+      unit        = "Count"
+
+      dimensions = {
+        CacheClusterId = local.instances[count.index]
+      }
+    }
+  }
+}
+
+data "aws_ec2_instance_type" "instance_attributes" {
+  instance_type = local.instance_size
+}
+
 locals {
   instance_count            = var.replica_count + 1
   instance_size             = split(".", var.node_type)[2]
@@ -162,15 +235,7 @@ locals {
   replica_enabled           = var.replica_count > 0
   shared_security_group_ids = var.server_security_group_ids
 
-  instance_size_thresholds = {
-    micro = 128
-    small = 768
-  }
-
-  memory_threshold_mb = try(
-    local.instance_size_thresholds[local.instance_size],
-    1024
-  )
+  memory_threshold_mb = data.aws_ec2_instance_type.instance_attributes.memory_size
 
   server_security_group_ids = concat(
     local.owned_security_group_ids,
