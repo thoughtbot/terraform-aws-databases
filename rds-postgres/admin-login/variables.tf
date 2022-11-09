@@ -31,6 +31,12 @@ variable "read_principals" {
   default     = null
 }
 
+variable "replica_identifier" {
+  description = "Identifier of the database replica"
+  type        = string
+  default     = null
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string
