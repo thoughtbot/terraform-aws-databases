@@ -71,7 +71,7 @@ data "aws_db_instance" "this" {
 }
 
 data "aws_db_instance" "replica" {
-  count = var.replica_identifier ? 1 : 0
+  count = can(var.replica_identifier) ? 1 : 0
 
   db_instance_identifier = var.replica_identifier
 }
@@ -88,5 +88,5 @@ locals {
     username     = var.username
   }
 
-  initial_secret_value = var.replica_identifier ? merge(local.base_value, { replica_host = data.aws_db_instance.replica[0].address }) : local.base_value
+  initial_secret_value = can(var.replica_identifier) ? merge(local.base_value, { replica_host = data.aws_db_instance.replica[0].address }) : local.base_value
 }
