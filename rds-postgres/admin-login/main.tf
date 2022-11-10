@@ -70,11 +70,11 @@ data "aws_db_instance" "this" {
   db_instance_identifier = var.identifier
 }
 
-data "aws_db_instance" "replica" {
-  count = can(var.replica_identifier) ? 1 : 0
+# data "aws_db_instance" "replica" {
+#   count = length(var.replica_identifier[*])
 
-  db_instance_identifier = var.replica_identifier
-}
+#   db_instance_identifier = var.replica_identifier
+# }
 
 locals {
   full_name = join("-", ["rds-postgres", var.identifier])
@@ -88,5 +88,5 @@ locals {
     username     = var.username
   }
 
-  initial_secret_value = can(var.replica_identifier) ? merge(local.base_value, { replica_host = data.aws_db_instance.replica[0].address }) : local.base_value
+  initial_secret_value = can(var.replica_host) ? merge(local.base_value, { replica_host = var.replica_host }) : local.base_value
 }
