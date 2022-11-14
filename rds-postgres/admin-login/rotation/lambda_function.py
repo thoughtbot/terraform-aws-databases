@@ -13,6 +13,7 @@ logger.setLevel(logging.INFO)
 
 ALTERNATE_USERNAME = os.environ['ALTERNATE_USERNAME']
 PRIMARY_USERNAME = os.environ['PRIMARY_USERNAME']
+REPLICA_HOST = os.environ['REPLICA_HOST']
 
 
 def lambda_handler(event, context):
@@ -127,11 +128,14 @@ def create_secret(service_client, arn, token):
         current_dict['password'] = passwd['RandomPassword']
 
         # Add DATABASE_URL to secret
-        current_dict['DATABASE_URL'] = dict_to_url(current_dict, false)
+        current_dict['DATABASE_URL'] = dict_to_url(current_dict, False)
 
-        if secret['replica_host']:
+        if REPLICA_HOST:
+            current_dict['replica_host'] = REPLICA_HOST
+
+        if current_dict['replica_host']:
             # Add DATABASE_REPLICA_URL to secret
-            current_dict['DATABASE_REPLICA_URL'] = dict_to_url(current_dict, true)
+            current_dict['DATABASE_REPLICA_URL'] = dict_to_url(current_dict, True)
 
         # Put the secret
         service_client.put_secret_value(SecretId=arn, ClientRequestToken=token, SecretString=json.dumps(current_dict), VersionStages=['AWSPENDING'])
