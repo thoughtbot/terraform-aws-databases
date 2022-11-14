@@ -10,12 +10,12 @@ module "secret" {
 
   # initial_value = jsonencode(local.initial_secret_value)
   initial_value = jsonencode({
-    dbname       = var.database_name
-    engine       = data.aws_db_instance.this.engine
-    host         = data.aws_db_instance.this.address
-    password     = var.initial_password
-    port         = tostring(data.aws_db_instance.this.port)
-    username     = var.username
+    dbname   = var.database_name
+    engine   = data.aws_db_instance.this.engine
+    host     = data.aws_db_instance.this.address
+    password = var.initial_password
+    port     = tostring(data.aws_db_instance.this.port)
+    username = var.username
   })
 }
 
