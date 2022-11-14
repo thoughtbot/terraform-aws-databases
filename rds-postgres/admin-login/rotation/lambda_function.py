@@ -33,7 +33,6 @@ def lambda_handler(event, context):
         'password': <required: password>,
         'dbname': <optional: database name, default to 'postgres'>,
         'port': <optional: if not specified, default port 5432 will be used>,
-        'replica_host': <optional: host address of replica DB>
     }
 
     Args:
@@ -131,9 +130,6 @@ def create_secret(service_client, arn, token):
         current_dict['DATABASE_URL'] = dict_to_url(current_dict, False)
 
         if REPLICA_HOST:
-            current_dict['replica_host'] = REPLICA_HOST
-
-        if current_dict['replica_host']:
             # Add DATABASE_REPLICA_URL to secret
             current_dict['DATABASE_REPLICA_URL'] = dict_to_url(current_dict, True)
 
@@ -301,7 +297,7 @@ def dict_to_url(secret, replica):
     if replica:
         host = secret['host']
     else:
-        host = secret['replica_host']
+        host = REPLICA_HOST
 
     return "postgres://%s:%s@%s:%s/%s" % (secret['username'],
             secret['password'], host, secret['port'],
