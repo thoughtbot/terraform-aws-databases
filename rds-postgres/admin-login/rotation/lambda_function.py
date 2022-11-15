@@ -295,9 +295,9 @@ def dict_to_url(secret, replica):
         url: DATABASE_URL-style string
     """
     if replica:
-        host = secret['host']
-    else:
         host = REPLICA_HOST
+    else:
+        host = secret['host']
 
     return "postgres://%s:%s@%s:%s/%s" % (secret['username'],
             secret['password'], host, secret['port'],
