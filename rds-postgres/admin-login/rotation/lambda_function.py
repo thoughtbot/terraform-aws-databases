@@ -13,7 +13,7 @@ logger.setLevel(logging.INFO)
 
 ALTERNATE_USERNAME = os.environ['ALTERNATE_USERNAME']
 PRIMARY_USERNAME = os.environ['PRIMARY_USERNAME']
-REPLICA_HOST = os.environ['REPLICA_HOST']
+REPLICA_HOST_PARAM = os.environ['REPLICA_HOST_PARAM']
 
 
 def lambda_handler(event, context):
@@ -111,6 +111,9 @@ def create_secret(service_client, arn, token):
         KeyError: If the secret json does not contain the expected keys
 
     """
+    # Setup ssm client
+    ssm_client = boto3.client('ssm')
+
     # Make sure the current secret exists
     current_dict = get_secret_dict(service_client, arn, "AWSCURRENT")
 
@@ -127,11 +130,15 @@ def create_secret(service_client, arn, token):
         current_dict['password'] = passwd['RandomPassword']
 
         # Add DATABASE_URL to secret
-        current_dict['DATABASE_URL'] = dict_to_url(current_dict, False)
+        current_dict['DATABASE_URL'] = dict_to_url(current_dict, "")
 
-        if REPLICA_HOST:
+        if REPLICA_HOST_PARAM:
+            # Fetch database replica url
+            replica_url_parameter = ssm_client.get_parameter(Name=REPLICA_HOST_PARAM, WithDecryption=True)
+            replica_url = replica_url_parameter['Parameter']['Value']
+
             # Add DATABASE_REPLICA_URL to secret
-            current_dict['DATABASE_REPLICA_URL'] = dict_to_url(current_dict, True)
+            current_dict['DATABASE_REPLICA_URL'] = dict_to_url(current_dict, replica_url)
 
         # Put the secret
         service_client.put_secret_value(SecretId=arn, ClientRequestToken=token, SecretString=json.dumps(current_dict), VersionStages=['AWSPENDING'])
@@ -295,9 +302,9 @@ def dict_to_url(secret, replica):
         url: DATABASE_URL-style string
     """
     if replica:
-        host = secret['host']
+        host = replica
     else:
-        host = REPLICA_HOST
+        host = secret['host']
 
     return "postgres://%s:%s@%s:%s/%s" % (secret['username'],
             secret['password'], host, secret['port'],

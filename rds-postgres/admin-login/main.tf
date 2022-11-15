@@ -41,7 +41,7 @@ module "rotation" {
   variables = {
     ALTERNATE_USERNAME = coalesce(var.alternate_username, "${var.username}_alt")
     PRIMARY_USERNAME   = var.username
-    REPLICA_HOST   = can(var.replica_host) ? var.replica_host : ""
+    REPLICA_HOST_PARAM   = can(var.replica_host_param) ? var.replica_host_param : ""
   }
 }
 
