@@ -15,8 +15,8 @@ Provision a Postgres database using AWS RDS.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.23.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.3.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.57.1 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
 
 ## Modules
 
@@ -57,6 +57,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_create_server_security_group"></a> [create\_server\_security\_group](#input\_create\_server\_security\_group) | Set to false to only use existing security groups | `bool` | `true` | no |
 | <a name="input_create_subnet_group"></a> [create\_subnet\_group](#input\_create\_subnet\_group) | Set to false to use existing subnet group | `bool` | `true` | no |
 | <a name="input_default_database"></a> [default\_database](#input\_default\_database) | Name of the default database | `string` | `"postgres"` | no |
+| <a name="input_enabled_cloudwatch_logs_exports"></a> [enabled\_cloudwatch\_logs\_exports](#input\_enabled\_cloudwatch\_logs\_exports) | Set of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported | `list(string)` | `[]` | no |
 | <a name="input_engine"></a> [engine](#input\_engine) | RDS database engine; defaults to Postgres | `string` | `"postgres"` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |
 | <a name="input_force_ssl"></a> [force\_ssl](#input\_force\_ssl) | Set to false to allow unencrypted connections to the database | `bool` | `true` | no |
