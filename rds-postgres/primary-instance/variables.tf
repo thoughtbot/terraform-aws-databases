@@ -47,6 +47,12 @@ variable "default_database" {
   default     = "postgres"
 }
 
+variable "enabled_cloudwatch_logs_exports" {
+  type        = list(string)
+  description = "Set of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported"
+  default     = []
+}
+
 variable "engine" {
   type        = string
   description = "RDS database engine; defaults to Postgres"
