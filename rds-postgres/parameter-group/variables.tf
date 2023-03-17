@@ -14,6 +14,12 @@ variable "force_ssl" {
   default     = true
 }
 
+variable "parameter" {
+  type        = map(string)
+  default     = {}
+  description = "Parameters to the applied to the database"
+}
+
 variable "tags" {
   type        = map(string)
   default     = {}
