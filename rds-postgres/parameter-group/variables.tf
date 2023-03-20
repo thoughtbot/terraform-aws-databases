@@ -14,7 +14,7 @@ variable "force_ssl" {
   default     = true
 }
 
-variable "parameter" {
+variable "parameters" {
   type        = map(string)
   default     = {}
   description = "Parameters to the applied to the database"
