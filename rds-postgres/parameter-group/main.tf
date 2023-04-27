@@ -11,7 +11,7 @@ locals {
       )
     ]
   )
-  parameter = merge({ "rds.force_ssl" = var.force_ssl ? 1 : 0 }, var.parameters)
+  parameters = merge({ "rds.force_ssl" = var.force_ssl ? 1 : 0 }, var.parameters)
 }
 
 resource "aws_db_parameter_group" "this" {
@@ -19,12 +19,12 @@ resource "aws_db_parameter_group" "this" {
   family = local.postgres_family
   tags   = var.tags
 
-  dynamic "parameters" {
+  dynamic "parameter" {
     for_each = local.parameters
 
     content {
-      name  = parameters.key
-      value = parameters.value
+      name  = parameter.key
+      value = parameter.value
     }
   }
 }
