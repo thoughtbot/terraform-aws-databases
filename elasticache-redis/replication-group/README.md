@@ -15,15 +15,15 @@ Provision a Redis cluster using AWS ElastiCache.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.23.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.3.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group | n/a |
-| <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group | n/a |
+| <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group |  |
+| <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group |  |
 
 ## Resources
 

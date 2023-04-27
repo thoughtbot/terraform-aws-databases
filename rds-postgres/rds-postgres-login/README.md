@@ -53,14 +53,14 @@ module "rds_admin_password" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.26.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function | v0.4.0 |
-| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret | v0.4.0 |
+| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.4.0 |  |
+| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret?ref=v0.4.0 |  |
 
 ## Resources
 
@@ -95,6 +95,7 @@ module "rds_admin_password" {
 
 | Name | Description |
 |------|-------------|
+| <a name="output_environment_variables"></a> [environment\_variables](#output\_environment\_variables) | Environment variables set by this rotation function |
 | <a name="output_policy_json"></a> [policy\_json](#output\_policy\_json) | Required IAM policies |
 | <a name="output_secret_arn"></a> [secret\_arn](#output\_secret\_arn) | ARN of the secrets manager secret containing credentials |
 | <a name="output_secret_name"></a> [secret\_name](#output\_secret\_name) | Name of the secrets manager secret containing credentials |

@@ -22,15 +22,15 @@ suitable for application credentials. We recommend you combine this module with
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.23.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function | v0.4.0 |
-| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret | v0.4.0 |
-| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | ../../security-group | n/a |
+| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.4.0 |  |
+| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret?ref=v0.4.0 |  |
+| <a name="module_security_group"></a> [security\_group](#module\_security\_group) | ../../security-group |  |
 
 ## Resources
 
@@ -63,6 +63,7 @@ suitable for application credentials. We recommend you combine this module with
 
 | Name | Description |
 |------|-------------|
+| <a name="output_environment_variables"></a> [environment\_variables](#output\_environment\_variables) | Environment variables set by this rotation function |
 | <a name="output_kms_key_arn"></a> [kms\_key\_arn](#output\_kms\_key\_arn) | ID of the KMS key used to encrypt the secret |
 | <a name="output_policy_json"></a> [policy\_json](#output\_policy\_json) | Required IAM policies |
 | <a name="output_rotation_role_arn"></a> [rotation\_role\_arn](#output\_rotation\_role\_arn) | ARN of the IAM role allowed to rotate this secret |

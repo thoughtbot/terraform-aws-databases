@@ -1,3 +1,8 @@
+output "environment_variables" {
+  description = "Environment variables set by this rotation function"
+  value       = ["REDIS_URL"]
+}
+
 output "kms_key_arn" {
   description = "ID of the KMS key used to encrypt the secret"
   value       = module.secret.kms_key_arn
