@@ -11,7 +11,7 @@ resource "aws_db_instance" "this" {
   identifier                      = var.identifier
   instance_class                  = var.instance_class
   iops                            = var.iops
-  kms_key_id                      = var.kms_key_id
+  kms_key_id                      = local.primary_kms_key
   maintenance_window              = var.maintenance_window
   max_allocated_storage           = var.max_allocated_storage
   multi_az                        = var.multi_az
@@ -48,6 +48,12 @@ resource "aws_db_instance" "this" {
   lifecycle {
     ignore_changes = [password]
   }
+}
+
+module "customer_kms" {
+  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=3e5155d"
+
+  name = var.identifier
 }
 
 resource "random_id" "snapshot_suffix" {
@@ -148,4 +154,6 @@ locals {
     local.owned_vpc_security_group_ids,
     local.shared_vpc_security_group_ids
   )
+
+  primary_kms_key = var.kms_key_id == null ? module.customer_kms.kms_key_arn : var.kms_key_id
 }

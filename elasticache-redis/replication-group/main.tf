@@ -5,7 +5,7 @@ resource "aws_elasticache_replication_group" "this" {
   automatic_failover_enabled    = local.replica_enabled
   engine                        = var.engine
   engine_version                = var.engine_version
-  kms_key_id                    = var.kms_key == null ? null : var.kms_key.id
+  kms_key_id                    = var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id
   multi_az_enabled              = local.replica_enabled
   node_type                     = var.node_type
   num_cache_clusters            = local.instance_count
@@ -33,6 +33,12 @@ resource "aws_elasticache_replication_group" "this" {
       engine_version
     ]
   }
+}
+
+module "customer_kms" {
+  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=3e5155d"
+
+  name = var.name
 }
 
 resource "aws_elasticache_subnet_group" "this" {
