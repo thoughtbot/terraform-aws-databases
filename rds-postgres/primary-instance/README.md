@@ -24,6 +24,7 @@ Provision a Postgres database using AWS RDS.
 |------|--------|---------|
 | <a name="module_alarms"></a> [alarms](#module\_alarms) | ../cloudwatch-alarms | n/a |
 | <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group | n/a |
+| <a name="module_customer_kms"></a> [customer\_kms](#module\_customer\_kms) | github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms | 3e5155d |
 | <a name="module_parameter_group"></a> [parameter\_group](#module\_parameter\_group) | ../parameter-group | n/a |
 | <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group | n/a |
 
@@ -95,5 +96,6 @@ Provision a Postgres database using AWS RDS.
 | <a name="output_identifier"></a> [identifier](#output\_identifier) | Identifier of the created RDS database |
 | <a name="output_initial_password"></a> [initial\_password](#output\_initial\_password) | Initial admin password for connecting to this database |
 | <a name="output_instance"></a> [instance](#output\_instance) | The created RDS database instance |
+| <a name="output_primary_kms_key"></a> [primary\_kms\_key](#output\_primary\_kms\_key) | KMS key arn in use by primary database instance. |
 | <a name="output_server_security_group_id"></a> [server\_security\_group\_id](#output\_server\_security\_group\_id) | Name of the security group created for the server |
 <!-- END_TF_DOCS -->

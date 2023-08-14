@@ -38,6 +38,11 @@ output "instance" {
   value       = aws_db_instance.this
 }
 
+output "primary_kms_key" {
+  description = "KMS key arn in use by primary database instance."
+  value       = local.primary_kms_key
+}
+
 output "server_security_group_id" {
   description = "Name of the security group created for the server"
   value       = join("", module.server_security_group.*.id)
