@@ -1,5 +1,5 @@
 locals {
-  kms_key_id = var.kms_key_id == null ? module.customer_kms.kms_key_arn : var.kms_key_id
+  kms_key_id = var.kms_key_id == null ? module.kms_key.kms_key_arn : var.kms_key_id
 
   # We can't have more subnets than nodes
   subnets = slice(
@@ -87,7 +87,7 @@ resource "aws_security_group_rule" "ingress" {
 module "kms_key" {
   source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.7.0"
 
-  name = var.identifier
+  name = "opensearch-${var.domain_name}"
 }
 
 data "aws_iam_policy_document" "es_access_policy" {
