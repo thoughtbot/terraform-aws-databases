@@ -7,6 +7,8 @@ locals {
     0,
     min(length(var.subnet_ids), var.instance_count)
   )
+
+  zone_awareness_enabled = length(local.subnets) > 1
 }
 
 resource "aws_opensearch_domain" "this" {
@@ -24,10 +26,14 @@ resource "aws_opensearch_domain" "this" {
   cluster_config {
     instance_type          = var.instance_type
     instance_count         = var.instance_count
-    zone_awareness_enabled = true
+    zone_awareness_enabled = local.zone_awareness_enabled
 
-    zone_awareness_config {
-      availability_zone_count = length(local.subnets)
+    dynamic "zone_awareness_config" {
+      for_each = local.zone_awareness_enabled ? [true] : []
+
+      content {
+        availability_zone_count = length(local.subnets)
+      }
     }
   }
 
