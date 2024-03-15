@@ -133,6 +133,6 @@ data "aws_ec2_instance_type" "instance_attributes" {
 }
 
 locals {
-  instance_type      = replace(var.instance_class,"db.","")
+  instance_type       = replace(var.instance_class, "db.", "")
   memory_threshold_mb = data.aws_ec2_instance_type.instance_attributes.memory_size
 }
