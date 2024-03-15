@@ -9,6 +9,12 @@ variable "allocated_storage" {
   type        = number
 }
 
+variable "db_connections_limit_threshold" {
+  type        = number
+  default     = 80
+  description = "The percentage threshold for number of database connections. Default: 80"
+}
+
 variable "identifier" {
   type        = string
   description = "Identifier of the database to monitor"
