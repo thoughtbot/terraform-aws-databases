@@ -68,8 +68,8 @@ resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
   threshold           = "0"
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = []
-  ok_actions    = []
+  alarm_actions = var.alarm_actions
+  ok_actions    = var.alarm_actions
 
   metric_query {
     id          = "e1"
@@ -128,6 +128,25 @@ resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
 
 }
 
+resource "aws_cloudwatch_metric_alarm" "db_connections_limit" {
+  alarm_name          = "${var.identifier}-database-connections-limit"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "5"
+  metric_name         = "DatabaseConnections"
+  namespace           = "AWS/RDS"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = local.db_connections_limit_threshold
+  alarm_description   = "Average database connections amount reached ${var.db_connections_limit_threshold} percent of the limit, may cause connection disruption"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = var.alarm_actions
+  ok_actions          = var.alarm_actions
+
+  dimensions = {
+    DBInstanceIdentifier = var.identifier
+  }
+}
+
 data "aws_ec2_instance_type" "instance_attributes" {
   instance_type = local.instance_type
 }
@@ -135,4 +154,9 @@ data "aws_ec2_instance_type" "instance_attributes" {
 locals {
   instance_type       = replace(var.instance_class, "db.", "")
   memory_threshold_mb = data.aws_ec2_instance_type.instance_attributes.memory_size
+
+  # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
+  postgres_divisor               = 9531392
+  max_connections_limit          = (data.aws_ec2_instance_type.instance_attributes.memory_size * 1048576) / local.postgres_divisor
+  db_connections_limit_threshold = min(floor((local.max_connections_limit / 100) * var.db_connections_limit_threshold), 5000)
 }
