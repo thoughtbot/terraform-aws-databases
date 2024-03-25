@@ -15,6 +15,12 @@ variable "db_connections_limit_threshold" {
   description = "The percentage threshold for number of database connections. Default: 80"
 }
 
+variable "db_memory_threshold" {
+  type        = number
+  default     = 0.1
+  description = "The percentage threshold of FreeableMemory left for the Database. Default: 10"
+}
+
 variable "identifier" {
   type        = string
   description = "Identifier of the database to monitor"
