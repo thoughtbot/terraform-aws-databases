@@ -23,8 +23,9 @@ resource "aws_db_parameter_group" "this" {
     for_each = local.parameters
 
     content {
-      name  = parameter.key
-      value = parameter.value
+      apply_method = "pending-reboot"
+      name         = parameter.key
+      value        = parameter.value
     }
   }
 }
