@@ -153,7 +153,7 @@ data "aws_ec2_instance_type" "instance_attributes" {
 
 locals {
   instance_type       = replace(var.instance_class, "db.", "")
-  memory_threshold_mb = data.aws_ec2_instance_type.instance_attributes.memory_size
+  memory_threshold_mb = data.aws_ec2_instance_type.instance_attributes.memory_size * var.db_memory_threshold * 0.01
 
   # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
   postgres_divisor               = 9531392
