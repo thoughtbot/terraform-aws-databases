@@ -17,8 +17,8 @@ variable "db_connections_limit_threshold" {
 
 variable "db_memory_threshold" {
   type        = number
-  default     = 0.2
-  description = "The percentage threshold of FreeableMemory left for the Database. Default: 10"
+  default     = 20
+  description = "The percentage threshold of FreeableMemory left for the Database. Default: 20"
 }
 
 variable "identifier" {
