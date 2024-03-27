@@ -36,7 +36,7 @@ resource "aws_elasticache_replication_group" "this" {
 }
 
 module "customer_kms" {
-  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=3e5155d"
+  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.7.0"
 
   name = var.name
 }
