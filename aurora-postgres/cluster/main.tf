@@ -2,14 +2,13 @@ resource "aws_rds_cluster_instance" "instance" {
   apply_immediately               = var.apply_immediately
   availability_zone               = var.availability_zones[0]
   cluster_identifier              = aws_rds_cluster.this.id
+  db_parameter_group_name         = var.parameter_group_name
   db_subnet_group_name            = local.subnet_group_name
   engine                          = var.engine
   engine_version                  = var.engine_version
   instance_class                  = var.instance_class
-  kms_key_id                      = local.primary_kms_key
   performance_insights_enabled    = var.performance_insights_enabled
   publicly_accessible             = var.publicly_accessible
-  storage_encrypted               = var.storage_encrypted
   tags                            = var.tags
 
   depends_on = [
@@ -135,8 +134,8 @@ module "alarms" {
   source = "../cloudwatch-alarms"
 
   alarm_actions     = var.alarm_actions
-  identifier        = aws_db_instance.this.identifier
-  instance_class    = aws_db_instance.this.instance_class
+  identifier        = aws_rds_cluster.this.id
+  instance_class    = var.instance_class
   allocated_storage = var.allocated_storage
 }
 
