@@ -1,10 +1,10 @@
 locals {
-  username = aws_db_instance.this.username
+  username = aws_rds_cluster.this.master_username
   password = coalesce(var.initial_password, random_password.database.result)
 }
 
 output "admin_username" {
-  description = "Admin username for connecting to this database"
+  description = "Admin username for connecting to this DB cluster"
   value       = local.username
 }
 
@@ -19,13 +19,13 @@ output "default_database" {
 }
 
 output "host" {
-  description = "The hostname to use when connecting to this database"
-  value       = aws_db_instance.this.address
+  description = "The hostname to use when connecting to this cluster"
+  value       = aws_rds_cluster.this.endpoint
 }
 
-output "identifier" {
-  description = "Identifier of the created RDS database"
-  value       = aws_db_instance.this.identifier
+output "cluster_identifier" {
+  description = "Identifier of the created Aurora cluster"
+  value       = aws_rds_cluster.this.cluster_identifier
 }
 
 output "initial_password" {
@@ -33,10 +33,10 @@ output "initial_password" {
   value       = local.password
 }
 
-output "instance" {
-  description = "The created RDS database instance"
-  value       = aws_db_instance.this
-}
+# output "instance" {
+#   description = "The created RDS database instance"
+#   value       = aws_db_instance.this
+# }
 
 output "primary_kms_key" {
   description = "KMS key arn in use by primary database instance."
