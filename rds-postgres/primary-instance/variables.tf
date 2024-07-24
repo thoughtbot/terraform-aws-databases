@@ -35,6 +35,12 @@ variable "backup_window" {
   default     = null
 }
 
+variable "ca_cert_id" {
+  type        = string
+  description = "Certificate authority for RDS database"
+  default     = "rds-ca-rsa2048-g1"
+}
+
 variable "create_default_db" {
   type        = bool
   description = "Set to false to disable creating a default database"
