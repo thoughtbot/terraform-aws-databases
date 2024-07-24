@@ -4,6 +4,7 @@ resource "aws_db_instance" "this" {
   auto_minor_version_upgrade      = var.auto_minor_version_upgrade
   backup_retention_period         = var.backup_retention_period
   backup_window                   = var.backup_window
+  ca_cert_identifier              = var.ca_cert_id
   db_subnet_group_name            = local.subnet_group_name
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
   engine                          = var.engine
