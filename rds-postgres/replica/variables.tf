@@ -9,6 +9,12 @@ variable "apply_immediately" {
   default     = false
 }
 
+variable "ca_cert_id" {
+  type        = string
+  description = "Certificate authority for RDS database"
+  default     = "rds-ca-rsa2048-g1"
+}
+
 variable "engine_version" {
   type        = string
   description = "Version for RDS database engine"
