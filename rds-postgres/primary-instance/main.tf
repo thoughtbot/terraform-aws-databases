@@ -51,7 +51,7 @@ resource "aws_db_instance" "this" {
 }
 
 module "customer_kms" {
-  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.7.0"
+  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.8.0"
 
   name = var.identifier
 }

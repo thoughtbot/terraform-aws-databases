@@ -1,22 +1,22 @@
 resource "aws_elasticache_replication_group" "this" {
   replication_group_id = coalesce(var.replication_group_id, var.name)
 
-  at_rest_encryption_enabled    = var.at_rest_encryption_enabled
-  automatic_failover_enabled    = local.replica_enabled
-  engine                        = var.engine
-  engine_version                = var.engine_version
-  kms_key_id                    = var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id
-  multi_az_enabled              = local.replica_enabled
-  node_type                     = var.node_type
-  num_cache_clusters            = local.instance_count
-  parameter_group_name          = var.parameter_group_name
-  port                          = var.port
-  replication_group_description = var.description
-  security_group_ids            = local.server_security_group_ids
-  snapshot_name                 = var.snapshot_name
-  snapshot_retention_limit      = var.snapshot_retention_limit
-  subnet_group_name             = aws_elasticache_subnet_group.this.name
-  transit_encryption_enabled    = var.transit_encryption_enabled
+  at_rest_encryption_enabled = var.at_rest_encryption_enabled
+  automatic_failover_enabled = local.replica_enabled
+  description                = var.description
+  engine                     = var.engine
+  engine_version             = var.engine_version
+  kms_key_id                 = var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id
+  multi_az_enabled           = local.replica_enabled
+  node_type                  = var.node_type
+  num_cache_clusters         = local.instance_count
+  parameter_group_name       = var.parameter_group_name
+  port                       = var.port
+  security_group_ids         = local.server_security_group_ids
+  snapshot_name              = var.snapshot_name
+  snapshot_retention_limit   = var.snapshot_retention_limit
+  subnet_group_name          = aws_elasticache_subnet_group.this.name
+  transit_encryption_enabled = var.transit_encryption_enabled
 
   # Auth tokens aren't supported without TLS
   auth_token = (
@@ -36,7 +36,7 @@ resource "aws_elasticache_replication_group" "this" {
 }
 
 module "customer_kms" {
-  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.7.0"
+  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.8.0"
 
   name = var.name
 }
@@ -229,7 +229,7 @@ data "aws_ec2_instance_type" "instance_attributes" {
 
 locals {
   instance_count            = var.replica_count + 1
-  instance_size             = split(".", var.node_type)[2]
+  instance_size             = replace(var.node_type, "cache.", "")
   instances                 = sort(aws_elasticache_replication_group.this.member_clusters)
   owned_security_group_ids  = module.server_security_group.*.id
   replica_enabled           = var.replica_count > 0
