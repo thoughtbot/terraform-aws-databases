@@ -9,7 +9,7 @@ module "secret" {
   trust_tags       = var.trust_tags
 
   initial_value = jsonencode({
-    dbname   = var.database.name
+    dbname   = var.database.db_name
     engine   = var.database.engine
     host     = var.database.address
     password = ""
