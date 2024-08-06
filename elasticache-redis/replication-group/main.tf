@@ -229,7 +229,7 @@ data "aws_ec2_instance_type" "instance_attributes" {
 
 locals {
   instance_count            = var.replica_count + 1
-  instance_size             = split(".", var.node_type)[2]
+  instance_size             = replace(var.node_type, "cache.", "")
   instances                 = sort(aws_elasticache_replication_group.this.member_clusters)
   owned_security_group_ids  = module.server_security_group.*.id
   replica_enabled           = var.replica_count > 0
