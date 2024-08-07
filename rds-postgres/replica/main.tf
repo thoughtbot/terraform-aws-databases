@@ -1,7 +1,11 @@
 resource "aws_db_instance" "this" {
   allocated_storage            = var.allocated_storage
   apply_immediately            = var.apply_immediately
+  backup_target                = var.backup_target
   db_subnet_group_name         = var.subnet_group_name
+  dedicated_log_volume         = var.dedicated_log_volume
+  domain_dns_ips               = var.domain_dns_ips
+  engine_lifecycle_support     = var.engine_lifecycle_support
   identifier                   = var.identifier
   instance_class               = var.instance_class
   kms_key_id                   = var.kms_key_id

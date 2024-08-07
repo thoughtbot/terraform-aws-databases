@@ -10,6 +10,12 @@ variable "at_rest_encryption_enabled" {
   default     = true
 }
 
+variable "cluster_mode" {
+  description = "Specifies whether cluster mode is enabled or disabled. Valid values are enabled or disabled"
+  type        = string
+  default     = null
+}
+
 variable "kms_key" {
   description = "Custom KMS key to encrypt data at rest"
   type        = object({ arn = string })
@@ -35,6 +41,12 @@ variable "engine_version" {
 variable "initial_auth_token" {
   type        = string
   description = "Override the initial auth token"
+  default     = null
+}
+
+variable "ip_discovery" {
+  type        = string
+  description = "The IP version to advertise in the discovery protocol. Valid values are ipv4 or ipv6"
   default     = null
 }
 
@@ -93,6 +105,12 @@ variable "subnet_group_name" {
   description = "Override the name for the subnet group"
   type        = string
   default     = ""
+}
+
+variable "transit_encryption_mode" {
+  description = "A setting that enables clients to migrate to in-transit encryption with no downtime. Valid values are preferred and required."
+  type        = string
+  default     = null
 }
 
 variable "tags" {

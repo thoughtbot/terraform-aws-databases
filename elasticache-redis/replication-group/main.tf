@@ -3,9 +3,11 @@ resource "aws_elasticache_replication_group" "this" {
 
   at_rest_encryption_enabled = var.at_rest_encryption_enabled
   automatic_failover_enabled = local.replica_enabled
+  cluster_mode               = var.cluster_mode
   description                = var.description
   engine                     = var.engine
   engine_version             = var.engine_version
+  ip_discovery               = var.ip_discovery
   kms_key_id                 = var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id
   multi_az_enabled           = local.replica_enabled
   node_type                  = var.node_type
@@ -17,6 +19,7 @@ resource "aws_elasticache_replication_group" "this" {
   snapshot_retention_limit   = var.snapshot_retention_limit
   subnet_group_name          = aws_elasticache_subnet_group.this.name
   transit_encryption_enabled = var.transit_encryption_enabled
+  transit_encryption_mode    = var.transit_encryption_mode
 
   # Auth tokens aren't supported without TLS
   auth_token = (

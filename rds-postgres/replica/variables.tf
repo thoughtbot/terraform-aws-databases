@@ -9,6 +9,30 @@ variable "apply_immediately" {
   default     = false
 }
 
+variable "backup_target" {
+  type        = string
+  description = "Specifies where automated backups and manual snapshots are stored. Possible values are region (default) and outposts."
+  default     = null
+}
+
+variable "dedicated_log_volume" {
+  type        = string
+  description = "Use a dedicated log volume (DLV) for the DB instance. Requires Provisioned IOPS."
+  default     = null
+}
+
+variable "domain_dns_ips" {
+  type        = string
+  description = "The IPv4 DNS IP addresses of your primary and secondary self managed Active Directory domain controllers."
+  default     = null
+}
+
+variable "engine_lifecycle_support" {
+  type        = string
+  description = "The life cycle type for this DB instance. This setting applies only to RDS for MySQL and RDS for PostgreSQL"
+  default     = null
+}
+
 variable "engine_version" {
   type        = string
   description = "Version for RDS database engine"

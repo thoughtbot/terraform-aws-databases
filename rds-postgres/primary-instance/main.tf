@@ -3,10 +3,14 @@ resource "aws_db_instance" "this" {
   apply_immediately               = var.apply_immediately
   auto_minor_version_upgrade      = var.auto_minor_version_upgrade
   backup_retention_period         = var.backup_retention_period
+  backup_target                   = var.backup_target
   backup_window                   = var.backup_window
   db_subnet_group_name            = local.subnet_group_name
+  dedicated_log_volume            = var.dedicated_log_volume
+  domain_dns_ips                  = var.domain_dns_ips
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
   engine                          = var.engine
+  engine_lifecycle_support        = var.engine_lifecycle_support
   engine_version                  = var.engine_version
   identifier                      = var.identifier
   instance_class                  = var.instance_class

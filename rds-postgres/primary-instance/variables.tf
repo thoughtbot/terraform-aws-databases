@@ -29,6 +29,12 @@ variable "backup_retention_period" {
   description = "Number of days to retain backups"
 }
 
+variable "backup_target" {
+  type        = string
+  description = "Specifies where automated backups and manual snapshots are stored. Possible values are region (default) and outposts."
+  default     = null
+}
+
 variable "backup_window" {
   type        = string
   description = "UTC time range in which backups can be captured, such as 18:00-22:00"
@@ -47,10 +53,28 @@ variable "default_database" {
   default     = "postgres"
 }
 
+variable "dedicated_log_volume" {
+  type        = string
+  description = "Use a dedicated log volume (DLV) for the DB instance. Requires Provisioned IOPS."
+  default     = null
+}
+
+variable "domain_dns_ips" {
+  type        = string
+  description = "The IPv4 DNS IP addresses of your primary and secondary self managed Active Directory domain controllers."
+  default     = null
+}
+
 variable "enabled_cloudwatch_logs_exports" {
   type        = list(string)
   description = "Set of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported"
   default     = []
+}
+
+variable "engine_lifecycle_support" {
+  type        = string
+  description = "The life cycle type for this DB instance. This setting applies only to RDS for MySQL and RDS for PostgreSQL"
+  default     = null
 }
 
 variable "engine" {
