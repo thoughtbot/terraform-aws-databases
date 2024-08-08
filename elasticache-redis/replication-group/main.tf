@@ -242,5 +242,5 @@ locals {
     local.shared_security_group_ids
   )
 
-  primary_kms_key = var.enable_kms ? (var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id) : var.kms_key
+  primary_kms_key = var.enable_kms ? (var.kms_key_id == null ? module.customer_kms.kms_key_arn : var.kms_key_id) : var.kms_key_id
 }
