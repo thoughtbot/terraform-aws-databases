@@ -10,9 +10,9 @@ variable "at_rest_encryption_enabled" {
   default     = true
 }
 
-variable "kms_key" {
-  description = "Custom KMS key to encrypt data at rest"
-  type        = object({ arn = string })
+variable "kms_key_id" {
+  description = "KMS key to encrypt data at rest"
+  type        = string
   default     = null
 }
 
