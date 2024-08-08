@@ -71,6 +71,12 @@ variable "enabled_cloudwatch_logs_exports" {
   default     = []
 }
 
+variable "enable_kms" {
+  type        = bool
+  description = "Enable KMS encryption"
+  default     = true
+}
+
 variable "engine_lifecycle_support" {
   type        = string
   description = "The life cycle type for this DB instance. This setting applies only to RDS for MySQL and RDS for PostgreSQL"

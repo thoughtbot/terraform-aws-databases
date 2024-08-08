@@ -27,6 +27,12 @@ variable "description" {
   type        = string
 }
 
+variable "enable_kms" {
+  type        = bool
+  description = "Enable KMS encryption"
+  default     = true
+}
+
 variable "engine" {
   type        = string
   description = "Elasticache database engine; defaults to Redis"

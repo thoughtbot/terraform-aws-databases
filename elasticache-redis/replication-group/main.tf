@@ -8,7 +8,7 @@ resource "aws_elasticache_replication_group" "this" {
   engine                     = var.engine
   engine_version             = var.engine_version
   ip_discovery               = var.ip_discovery
-  kms_key_id                 = var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id
+  kms_key_id                 = local.primary_kms_key
   multi_az_enabled           = local.replica_enabled
   node_type                  = var.node_type
   num_cache_clusters         = local.instance_count
@@ -244,4 +244,6 @@ locals {
     local.owned_security_group_ids,
     local.shared_security_group_ids
   )
+
+  primary_kms_key = var.enable_kms ? (var.kms_key == null ? module.customer_kms.kms_key_arn : var.kms_key.id) : var.kms_key
 }
