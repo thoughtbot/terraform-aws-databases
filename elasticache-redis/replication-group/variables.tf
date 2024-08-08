@@ -38,6 +38,12 @@ variable "engine_version" {
   description = "Version for RDS database engine"
 }
 
+variable "global_replication_group_id" {
+  type        = string
+  description = "The ID of the global replication group to which this replication group should belong."
+  default     = null
+}
+
 variable "initial_auth_token" {
   type        = string
   description = "Override the initial auth token"

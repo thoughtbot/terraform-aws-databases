@@ -1,22 +1,23 @@
 resource "aws_elasticache_replication_group" "this" {
   replication_group_id = coalesce(var.replication_group_id, var.name)
 
-  at_rest_encryption_enabled = var.at_rest_encryption_enabled
-  automatic_failover_enabled = local.replica_enabled
-  description                = var.description
-  engine                     = var.engine
-  engine_version             = var.engine_version
-  kms_key_id                 = local.primary_kms_key
-  multi_az_enabled           = local.replica_enabled
-  node_type                  = var.node_type
-  num_cache_clusters         = local.instance_count
-  parameter_group_name       = var.parameter_group_name
-  port                       = var.port
-  security_group_ids         = local.server_security_group_ids
-  snapshot_name              = var.snapshot_name
-  snapshot_retention_limit   = var.snapshot_retention_limit
-  subnet_group_name          = aws_elasticache_subnet_group.this.name
-  transit_encryption_enabled = var.transit_encryption_enabled
+  at_rest_encryption_enabled  = var.at_rest_encryption_enabled
+  automatic_failover_enabled  = local.replica_enabled
+  description                 = var.description
+  engine                      = var.engine
+  engine_version              = var.engine_version
+  global_replication_group_id = var.global_replication_group_id
+  kms_key_id                  = local.primary_kms_key
+  multi_az_enabled            = local.replica_enabled
+  node_type                   = var.node_type
+  num_cache_clusters          = local.instance_count
+  parameter_group_name        = var.parameter_group_name
+  port                        = var.port
+  security_group_ids          = local.server_security_group_ids
+  snapshot_name               = var.snapshot_name
+  snapshot_retention_limit    = var.snapshot_retention_limit
+  subnet_group_name           = aws_elasticache_subnet_group.this.name
+  transit_encryption_enabled  = var.transit_encryption_enabled
 
   # Auth tokens aren't supported without TLS
   auth_token = (
