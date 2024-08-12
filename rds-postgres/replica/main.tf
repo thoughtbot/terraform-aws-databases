@@ -1,6 +1,7 @@
 resource "aws_db_instance" "this" {
   allocated_storage            = var.allocated_storage
   apply_immediately            = var.apply_immediately
+  ca_cert_identifier           = var.ca_cert_id
   db_subnet_group_name         = var.subnet_group_name
   identifier                   = var.identifier
   instance_class               = var.instance_class
