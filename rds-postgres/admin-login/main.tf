@@ -8,6 +8,7 @@ module "secret" {
   resource_tags    = var.tags
   trust_tags       = var.trust_tags
 
+  # initial_value = jsonencode(local.initial_secret_value)
   initial_value = jsonencode({
     dbname   = var.database_name
     engine   = data.aws_db_instance.this.engine
@@ -40,6 +41,7 @@ module "rotation" {
   variables = {
     ALTERNATE_USERNAME = coalesce(var.alternate_username, "${var.username}_alt")
     PRIMARY_USERNAME   = var.username
+    REPLICA_HOST   = can(var.replica_host) ? var.replica_host : ""
   }
 }
 
@@ -79,4 +81,15 @@ data "aws_db_instance" "this" {
 
 locals {
   full_name = join("-", ["rds-postgres", var.identifier])
+
+  # base_value = {
+  #   dbname       = var.database_name
+  #   engine       = data.aws_db_instance.this.engine
+  #   host         = data.aws_db_instance.this.address
+  #   password     = var.initial_password
+  #   port         = tostring(data.aws_db_instance.this.port)
+  #   username     = var.username
+  # }
+
+  # initial_secret_value = can(var.replica_host) ? merge(local.base_value, { replica_host = var.replica_host }) : local.base_value
 }
