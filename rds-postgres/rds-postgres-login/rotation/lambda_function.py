@@ -15,7 +15,7 @@ ADMIN_LOGIN_SECRET_ARN = os.environ['ADMIN_LOGIN_SECRET_ARN']
 ALTERNATE_USERNAME = os.environ['ALTERNATE_USERNAME']
 GRANTS = json.loads(os.environ['GRANTS'])
 PRIMARY_USERNAME = os.environ['PRIMARY_USERNAME']
-DATABASE_URL_SECRET_NAME = os.environ['DATABASE_URL_SECRET_NAME']
+DATABASE_URL_SECRET_KEY = os.environ['DATABASE_URL_SECRET_KEY']
 
 def lambda_handler(event, context):
     """Secrets Manager RDS PostgreSQL Handler
@@ -129,7 +129,7 @@ def create_secret(service_client, arn, token):
         current_dict['password'] = passwd['RandomPassword']
 
         # Add DATABASE_URL to secret
-        current_dict[DATABASE_URL_SECRET_NAME] = dict_to_url(current_dict)
+        current_dict[DATABASE_URL_SECRET_KEY] = dict_to_url(current_dict)
 
         # Put the secret
         service_client.put_secret_value(SecretId=arn, ClientRequestToken=token, SecretString=json.dumps(current_dict), VersionStages=['AWSPENDING'])

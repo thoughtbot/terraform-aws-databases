@@ -38,7 +38,7 @@ module "rotation" {
     ALTERNATE_USERNAME       = coalesce(var.alternate_username, "${var.username}_alt")
     GRANTS                   = jsonencode(var.grants)
     PRIMARY_USERNAME         = var.username
-    DATABASE_URL_SECRET_NAME = local.database_url_secret_name
+    DATABASE_URL_SECRET_KEY = local.database_url_secret_key
   }
 }
 
@@ -102,5 +102,5 @@ data "aws_kms_key" "admin_login" {
 
 locals {
   full_name                = join("-", ["rds-postgres", var.database.identifier, var.username])
-  database_url_secret_name = var.replica ? "REPLICA_DATABASE_URL" : "DATABASE_URL"
+  database_url_secret_key = var.replica ? "REPLICA_DATABASE_URL" : "DATABASE_URL"
 }
