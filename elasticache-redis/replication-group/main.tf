@@ -68,7 +68,7 @@ module "server_security_group" {
 
   allowed_security_group_ids = concat(
     var.allowed_security_group_ids,
-    module.client_security_group.*.id
+    module.client_security_group[*].id
   )
 
   name = coalesce(
@@ -128,8 +128,8 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
     CacheClusterId = local.instances[count.index]
   }
 
-  alarm_actions = var.alarm_actions.*.arn
-  ok_actions    = var.alarm_actions.*.arn
+  alarm_actions = var.alarm_actions[*].arn
+  ok_actions    = var.alarm_actions[*].arn
 }
 
 resource "aws_cloudwatch_metric_alarm" "memory" {
@@ -150,8 +150,8 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
     CacheClusterId = local.instances[count.index]
   }
 
-  alarm_actions = var.alarm_actions.*.arn
-  ok_actions    = var.alarm_actions.*.arn
+  alarm_actions = var.alarm_actions[*].arn
+  ok_actions    = var.alarm_actions[*].arn
 }
 
 resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
@@ -164,8 +164,8 @@ resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
   threshold           = "0"
   treat_missing_data  = "notBreaching"
 
-  alarm_actions = var.alarm_actions.*.arn
-  ok_actions    = var.alarm_actions.*.arn
+  alarm_actions = var.alarm_actions[*].arn
+  ok_actions    = var.alarm_actions[*].arn
 
   metric_query {
     id          = "e1"
@@ -231,7 +231,7 @@ locals {
   instance_count            = var.replica_count + 1
   instance_size             = split(".", var.node_type)[2]
   instances                 = sort(aws_elasticache_replication_group.this.member_clusters)
-  owned_security_group_ids  = module.server_security_group.*.id
+  owned_security_group_ids  = module.server_security_group[*].id
   replica_enabled           = var.replica_count > 0
   shared_security_group_ids = var.server_security_group_ids
 
