@@ -8,14 +8,14 @@ Provision a Postgres database using AWS RDS.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
 
 ## Modules
@@ -24,7 +24,7 @@ Provision a Postgres database using AWS RDS.
 |------|--------|---------|
 | <a name="module_alarms"></a> [alarms](#module\_alarms) | ../cloudwatch-alarms | n/a |
 | <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group | n/a |
-| <a name="module_customer_kms"></a> [customer\_kms](#module\_customer\_kms) | github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms | v0.7.0 |
+| <a name="module_customer_kms"></a> [customer\_kms](#module\_customer\_kms) | github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms | v0.8.0 |
 | <a name="module_parameter_group"></a> [parameter\_group](#module\_parameter\_group) | ../parameter-group | n/a |
 | <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group | n/a |
 
@@ -59,6 +59,7 @@ Provision a Postgres database using AWS RDS.
 | <a name="input_create_server_security_group"></a> [create\_server\_security\_group](#input\_create\_server\_security\_group) | Set to false to only use existing security groups | `bool` | `true` | no |
 | <a name="input_create_subnet_group"></a> [create\_subnet\_group](#input\_create\_subnet\_group) | Set to false to use existing subnet group | `bool` | `true` | no |
 | <a name="input_default_database"></a> [default\_database](#input\_default\_database) | Name of the default database | `string` | `"postgres"` | no |
+| <a name="input_enable_kms"></a> [enable\_kms](#input\_enable\_kms) | Enable KMS encryption | `bool` | `true` | no |
 | <a name="input_enabled_cloudwatch_logs_exports"></a> [enabled\_cloudwatch\_logs\_exports](#input\_enabled\_cloudwatch\_logs\_exports) | Set of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported | `list(string)` | `[]` | no |
 | <a name="input_engine"></a> [engine](#input\_engine) | RDS database engine; defaults to Postgres | `string` | `"postgres"` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |

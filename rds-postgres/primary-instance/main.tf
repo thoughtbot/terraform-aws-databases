@@ -52,7 +52,7 @@ resource "aws_db_instance" "this" {
 }
 
 module "customer_kms" {
-  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.7.0"
+  source = "github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms?ref=v0.8.0"
 
   name = var.identifier
 }
@@ -156,5 +156,5 @@ locals {
     local.shared_vpc_security_group_ids
   )
 
-  primary_kms_key = var.kms_key_id == null ? module.customer_kms.kms_key_arn : var.kms_key_id
+  primary_kms_key = var.enable_kms ? (var.kms_key_id == null ? module.customer_kms.kms_key_arn : var.kms_key_id) : var.kms_key_id
 }
