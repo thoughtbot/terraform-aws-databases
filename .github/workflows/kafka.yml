@@ -1,0 +1,23 @@
+name: kafka
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - kafka/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: kafka
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write

@@ -1,0 +1,23 @@
+name: rds-postgres/admin-login
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - rds-postgres/admin-login/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: rds-postgres/admin-login
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write

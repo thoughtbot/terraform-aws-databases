@@ -1,0 +1,23 @@
+name: rds-postgres/security-group-ingress
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - rds-postgres/security-group-ingress/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: rds-postgres/security-group-ingress
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write

@@ -1,0 +1,23 @@
+name: terraform-missing
+on:
+  pull_request:
+    branches:
+    - main
+    types:
+    - closed
+    - opened
+    - reopened
+    - synchronize
+jobs:
+  check-terraform-missing:
+    runs-on: [ubuntu-20.04]
+    defaults:
+      run:
+        shell: bash
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Find missing workflows
+      run: bin/find-missing-github-workflows
