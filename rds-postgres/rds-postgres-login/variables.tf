@@ -45,6 +45,12 @@ variable "read_principals" {
   default     = null
 }
 
+variable "replica" {
+  description = "Whether the login is for a replica instance"
+  type        = bool
+  default     = false
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string

@@ -41,6 +41,9 @@ module "rds_admin_password" {
 }
 ```
 
+> [!WARNING]  
+> The [replica](#input\_replica) variable **MUST** be set to `true` when creating a login for a Postgres replica instance. This is needed to ensure the Database URL secret won't conflict with the primary instance. As a result of setting that variable, the Database URL for the replica will be available as "REPLICA_DATABASE_URL", while the primary instance will have "DATABASE_URL".
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -84,6 +87,7 @@ module "rds_admin_password" {
 | <a name="input_database"></a> [database](#input\_database) | The database instance for which a login will be managed | <pre>object({<br>    address    = string<br>    arn        = string<br>    engine     = string<br>    identifier = string<br>    name       = string<br>    port       = number<br>  })</pre> | n/a | yes |
 | <a name="input_grants"></a> [grants](#input\_grants) | List of GRANT statements for this user | `list(string)` | n/a | yes |
 | <a name="input_read_principals"></a> [read\_principals](#input\_read\_principals) | Principals allowed to read the secret (default: current account) | `list(string)` | `null` | no |
+| <a name="input_replica"></a> [replica](#input\_replica) | Whether the login is for a replica instance | `bool` | `false` | no |
 | <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | Override the name for this secret | `string` | `null` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets in which the rotation function should run | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
