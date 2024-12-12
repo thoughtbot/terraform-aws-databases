@@ -1,0 +1,23 @@
+name: elasticache-redis/auth-token
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - elasticache-redis/auth-token/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: elasticache-redis/auth-token
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write

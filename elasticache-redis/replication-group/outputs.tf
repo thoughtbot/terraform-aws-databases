@@ -1,6 +1,6 @@
 output "client_security_group_id" {
   description = "Name of the security group created for clients"
-  value       = join("", module.client_security_group.*.id)
+  value       = join("", module.client_security_group[*].id)
 }
 
 output "initial_auth_token" {
@@ -20,5 +20,5 @@ output "id" {
 
 output "server_security_group_id" {
   description = "Name of the security group created for the server"
-  value       = join("", module.server_security_group.*.id)
+  value       = join("", module.server_security_group[*].id)
 }
