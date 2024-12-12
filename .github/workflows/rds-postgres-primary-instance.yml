@@ -1,0 +1,23 @@
+name: rds-postgres/primary-instance
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - rds-postgres/primary-instance/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: rds-postgres/primary-instance
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write

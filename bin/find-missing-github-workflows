@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+find_missing() {
+  git ls-files \
+    | grep -e ".*\.tf$" \
+    | grep -v modules \
+    | grep -v templates \
+    | xargs -n1 dirname \
+    | sort \
+    | uniq \
+    | while read root; do
+    workflow=".github/workflows/$(echo "$root" | sed "s|[^a-z0-9-]|-|g").yml"
+
+    if ! [ -f "$workflow" ]; then
+      echo "Expected to find workflow $workflow"
+    fi
+  done
+}
+
+missing=$(find_missing)
+
+if [ -n "$missing" ]; then
+  echo "$missing" >&2
+  exit 1
+fi

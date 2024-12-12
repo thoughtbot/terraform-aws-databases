@@ -1,0 +1,86 @@
+name: Terraform
+on:
+  workflow_call:
+    inputs:
+      terraform_version:
+        default: 1.4.2
+        type: string
+      module:
+        type: string
+        required: true
+
+jobs:
+  validate:
+    name: Terraform
+    runs-on:
+      - ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.module }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ inputs.terraform_version }}
+        terraform_wrapper: false
+
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check
+
+    - name: Cache tflint
+      uses: actions/cache@v3
+      with:
+        path: ~/.tflint.d/plugins
+        key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+    - name: Setup TFLint
+      uses: terraform-linters/setup-tflint@v1
+      with:
+        tflint_version: v0.45.0
+
+    - name: Init tflint
+      id: lintinit
+      run: tflint --init --config="$GITHUB_WORKSPACE/.tflint.hcl"
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Run tflint
+      id: lint
+      run: tflint --config="$GITHUB_WORKSPACE/.tflint.hcl" --format=compact
+
+  docs:
+    name: tf-docs
+    runs-on:
+      - ubuntu-22.04
+    needs: validate
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ inputs.module }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Update Docs
+      uses: terraform-docs/gh-actions@v1.0.0
+      with:
+        working-dir: ${{ inputs.module }}
+        output-file: README.md
+        output-method: inject
+        git-push: "true"
