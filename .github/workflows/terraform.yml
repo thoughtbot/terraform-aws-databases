@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       terraform_version:
-        default: 1.4.2
+        default: 1.6.2
         type: string
       module:
         type: string
