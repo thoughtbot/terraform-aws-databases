@@ -88,7 +88,7 @@ module "server_security_group" {
 
   allowed_security_group_ids = concat(
     var.allowed_security_group_ids,
-    module.client_security_group.*.id
+    module.client_security_group[*].id
   )
 
   name = coalesce(
@@ -138,7 +138,7 @@ resource "aws_db_subnet_group" "this" {
 }
 
 locals {
-  owned_vpc_security_group_ids  = module.server_security_group.*.id
+  owned_vpc_security_group_ids  = module.server_security_group[*].id
   shared_vpc_security_group_ids = var.server_security_group_ids
 
   parameter_group_name = coalesce(

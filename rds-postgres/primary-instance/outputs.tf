@@ -10,7 +10,7 @@ output "admin_username" {
 
 output "client_security_group_id" {
   description = "Name of the security group created for clients"
-  value       = join("", module.client_security_group.*.id)
+  value       = join("", module.client_security_group[*].id)
 }
 
 output "default_database" {
@@ -45,5 +45,5 @@ output "primary_kms_key" {
 
 output "server_security_group_id" {
   description = "Name of the security group created for the server"
-  value       = join("", module.server_security_group.*.id)
+  value       = join("", module.server_security_group[*].id)
 }
