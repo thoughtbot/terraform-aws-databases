@@ -1,5 +1,6 @@
 output "zookeeper_connect_string" {
-  value = aws_msk_cluster.this.zookeeper_connect_string
+  description = "The connection string to use to connect to the Zookeeper cluster"
+  value       = aws_msk_cluster.this.zookeeper_connect_string
 }
 
 output "bootstrap_brokers" {
