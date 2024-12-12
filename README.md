@@ -11,3 +11,7 @@ Modules:
   * [User Login](./rds-postgres/user-login/README.md)
 * [Redis](./elasticacahe-redis/README.md) (ElastiCache)
   * [Cluster](./elasticacahe-redis/cluster/README.md)
+
+<!-- BEGIN_TF_DOCS -->
+
+<!-- END_TF_DOCS -->

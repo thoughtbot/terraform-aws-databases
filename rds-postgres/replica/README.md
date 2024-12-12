@@ -7,14 +7,14 @@ Provision a Postgres database configured as a replica using AWS RDS.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.2 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.23.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
 
 ## Modules
 
@@ -36,6 +36,7 @@ Provision a Postgres database configured as a replica using AWS RDS.
 | <a name="input_alarm_actions"></a> [alarm\_actions](#input\_alarm\_actions) | SNS topic ARNs or other actions to invoke for alarms | `list(string)` | `[]` | no |
 | <a name="input_allocated_storage"></a> [allocated\_storage](#input\_allocated\_storage) | Size in GB for the database instance | `number` | n/a | yes |
 | <a name="input_apply_immediately"></a> [apply\_immediately](#input\_apply\_immediately) | Set to true to immediately apply changes and cause downtime | `bool` | `false` | no |
+| <a name="input_ca_cert_id"></a> [ca\_cert\_id](#input\_ca\_cert\_id) | Certificate authority for RDS database | `string` | `"rds-ca-rsa2048-g1"` | no |
 | <a name="input_create_cloudwatch_alarms"></a> [create\_cloudwatch\_alarms](#input\_create\_cloudwatch\_alarms) | Set to false to disable creation of CloudWatch alarms | `bool` | `true` | no |
 | <a name="input_create_parameter_group"></a> [create\_parameter\_group](#input\_create\_parameter\_group) | Set to false to use existing parameter group | `bool` | `true` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |
