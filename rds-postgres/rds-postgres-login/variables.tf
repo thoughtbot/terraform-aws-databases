@@ -27,9 +27,9 @@ variable "database" {
   type = object({
     address    = string
     arn        = string
+    db_name    = string
     engine     = string
     identifier = string
-    name       = string
     port       = number
   })
 }

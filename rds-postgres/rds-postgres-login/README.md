@@ -50,20 +50,20 @@ module "rds_admin_password" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function | v0.4.0 |
-| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret | v0.4.0 |
+| <a name="module_rotation"></a> [rotation](#module\_rotation) | github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function | v0.8.0 |
+| <a name="module_secret"></a> [secret](#module\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret | v0.8.0 |
 
 ## Resources
 
@@ -84,7 +84,7 @@ module "rds_admin_password" {
 | <a name="input_admin_login_secret_arn"></a> [admin\_login\_secret\_arn](#input\_admin\_login\_secret\_arn) | ARN of a SecretsManager secret containing admin login | `string` | `null` | no |
 | <a name="input_admin_principals"></a> [admin\_principals](#input\_admin\_principals) | Principals allowed to peform admin actions (default: current account) | `list(string)` | `null` | no |
 | <a name="input_alternate_username"></a> [alternate\_username](#input\_alternate\_username) | Username for the alternate login used during rotation | `string` | `null` | no |
-| <a name="input_database"></a> [database](#input\_database) | The database instance for which a login will be managed | <pre>object({<br>    address    = string<br>    arn        = string<br>    engine     = string<br>    identifier = string<br>    name       = string<br>    port       = number<br>  })</pre> | n/a | yes |
+| <a name="input_database"></a> [database](#input\_database) | The database instance for which a login will be managed | <pre>object({<br>    address    = string<br>    arn        = string<br>    db_name    = string<br>    engine     = string<br>    identifier = string<br>    port       = number<br>  })</pre> | n/a | yes |
 | <a name="input_grants"></a> [grants](#input\_grants) | List of GRANT statements for this user | `list(string)` | n/a | yes |
 | <a name="input_read_principals"></a> [read\_principals](#input\_read\_principals) | Principals allowed to read the secret (default: current account) | `list(string)` | `null` | no |
 | <a name="input_replica"></a> [replica](#input\_replica) | Whether the login is for a replica instance | `bool` | `false` | no |

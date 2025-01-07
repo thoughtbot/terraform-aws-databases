@@ -10,15 +10,21 @@ variable "at_rest_encryption_enabled" {
   default     = true
 }
 
-variable "kms_key" {
-  description = "Custom KMS key to encrypt data at rest"
-  type        = object({ arn = string })
+variable "kms_key_id" {
+  description = "KMS key to encrypt data at rest"
+  type        = string
   default     = null
 }
 
 variable "description" {
   description = "Human-readable description for this replication group"
   type        = string
+}
+
+variable "enable_kms" {
+  type        = bool
+  description = "Enable KMS encryption"
+  default     = true
 }
 
 variable "engine" {
@@ -30,6 +36,12 @@ variable "engine" {
 variable "engine_version" {
   type        = string
   description = "Version for RDS database engine"
+}
+
+variable "global_replication_group_id" {
+  type        = string
+  description = "The ID of the global replication group to which this replication group should belong."
+  default     = null
 }
 
 variable "initial_auth_token" {
