@@ -1,0 +1,23 @@
+name: opensearch
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - opensearch/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: opensearch
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write
