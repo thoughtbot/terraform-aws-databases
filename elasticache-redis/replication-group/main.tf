@@ -17,7 +17,20 @@ resource "aws_elasticache_replication_group" "this" {
   snapshot_retention_limit      = var.snapshot_retention_limit
   subnet_group_name             = aws_elasticache_subnet_group.this.name
   transit_encryption_enabled    = var.transit_encryption_enabled
-
+  
+  #Enable Elasticache Redis logs
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.slow_log.name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "slow-log"
+  }
+  log_delivery_configuration {
+    destination      = aws_cloudwatch_log_group.engine_log.name
+    destination_type = "cloudwatch-logs"
+    log_format       = "json"
+    log_type         = "engine-log"
+  }
   # Auth tokens aren't supported without TLS
   auth_token = (
     var.transit_encryption_enabled ?
@@ -33,6 +46,13 @@ resource "aws_elasticache_replication_group" "this" {
       engine_version
     ]
   }
+}
+
+resource "aws_cloudwatch_log_group" "slow_log" {
+  name = "${var.name}_slow_log"
+}
+resource "aws_cloudwatch_log_group" "engine_log" {
+  name =  "${var.name}_engine_log"
 }
 
 resource "aws_elasticache_subnet_group" "this" {
