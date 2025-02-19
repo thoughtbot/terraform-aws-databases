@@ -28,7 +28,7 @@ resource "aws_db_instance" "this" {
     [var.identifier, random_id.snapshot_suffix.hex, "final"]
   )
 
-  name = (
+  db_name = (
     var.create_default_db ?
     var.default_database :
     null

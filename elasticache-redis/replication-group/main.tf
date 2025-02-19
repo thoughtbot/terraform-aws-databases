@@ -8,16 +8,16 @@ resource "aws_elasticache_replication_group" "this" {
   kms_key_id                    = var.kms_key == null ? null : var.kms_key.id
   multi_az_enabled              = local.replica_enabled
   node_type                     = var.node_type
-  number_cache_clusters         = local.instance_count
+  num_cache_clusters            = local.instance_count
   parameter_group_name          = var.parameter_group_name
   port                          = var.port
-  replication_group_description = var.description
+  description                   = var.description
   security_group_ids            = local.server_security_group_ids
   snapshot_name                 = var.snapshot_name
   snapshot_retention_limit      = var.snapshot_retention_limit
   subnet_group_name             = aws_elasticache_subnet_group.this.name
   transit_encryption_enabled    = var.transit_encryption_enabled
-  
+
   #Enable Elasticache Redis logs
   log_delivery_configuration {
     destination      = aws_cloudwatch_log_group.slow_log.name
