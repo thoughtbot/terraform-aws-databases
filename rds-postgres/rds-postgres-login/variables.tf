@@ -29,7 +29,7 @@ variable "database" {
     arn        = string
     engine     = string
     identifier = string
-    name       = string
+    db_name    = string
     port       = number
   })
 }
