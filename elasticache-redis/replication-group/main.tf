@@ -17,6 +17,7 @@ resource "aws_elasticache_replication_group" "this" {
   snapshot_retention_limit      = var.snapshot_retention_limit
   subnet_group_name             = aws_elasticache_subnet_group.this.name
   transit_encryption_enabled    = var.transit_encryption_enabled
+  apply_immediately             = true
 
   #Enable Elasticache Redis logs
   log_delivery_configuration {
