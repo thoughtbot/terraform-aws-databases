@@ -1,23 +1,23 @@
 resource "aws_elasticache_replication_group" "this" {
   replication_group_id = coalesce(var.replication_group_id, var.name)
 
-  at_rest_encryption_enabled    = var.at_rest_encryption_enabled
-  automatic_failover_enabled    = local.replica_enabled
-  engine                        = var.engine
-  engine_version                = var.engine_version
-  kms_key_id                    = var.kms_key == null ? null : var.kms_key.id
-  multi_az_enabled              = local.replica_enabled
-  node_type                     = var.node_type
-  num_cache_clusters            = local.instance_count
-  parameter_group_name          = var.parameter_group_name
-  port                          = var.port
-  description                   = var.description
-  security_group_ids            = local.server_security_group_ids
-  snapshot_name                 = var.snapshot_name
-  snapshot_retention_limit      = var.snapshot_retention_limit
-  subnet_group_name             = aws_elasticache_subnet_group.this.name
-  transit_encryption_enabled    = var.transit_encryption_enabled
-  apply_immediately             = true
+  at_rest_encryption_enabled = var.at_rest_encryption_enabled
+  automatic_failover_enabled = local.replica_enabled
+  engine                     = var.engine
+  engine_version             = var.engine_version
+  kms_key_id                 = var.kms_key == null ? null : var.kms_key.id
+  multi_az_enabled           = local.replica_enabled
+  node_type                  = var.node_type
+  num_cache_clusters         = local.instance_count
+  parameter_group_name       = var.parameter_group_name
+  port                       = var.port
+  description                = var.description
+  security_group_ids         = local.server_security_group_ids
+  snapshot_name              = var.snapshot_name
+  snapshot_retention_limit   = var.snapshot_retention_limit
+  subnet_group_name          = aws_elasticache_subnet_group.this.name
+  transit_encryption_enabled = var.transit_encryption_enabled
+  apply_immediately          = true
 
   #Enable Elasticache Redis logs
   log_delivery_configuration {
@@ -50,10 +50,12 @@ resource "aws_elasticache_replication_group" "this" {
 }
 
 resource "aws_cloudwatch_log_group" "slow_log" {
-  name = "${var.name}_slow_log"
+  name              = "${var.name}_slow_log"
+  retention_in_days = 30
 }
 resource "aws_cloudwatch_log_group" "engine_log" {
-  name =  "${var.name}_engine_log"
+  name              = "${var.name}_engine_log"
+  retention_in_days = 30
 }
 
 resource "aws_elasticache_subnet_group" "this" {
