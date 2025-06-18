@@ -29,9 +29,7 @@ resource "aws_elasticache_replication_group" "this" {
   lifecycle {
     ignore_changes = [
       # The token should be rotated externally
-      auth_token,
-      # Minor upgrades will cause noise in diffs
-      engine_version
+      auth_token
     ]
   }
 }
