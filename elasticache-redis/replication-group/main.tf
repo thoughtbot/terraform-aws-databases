@@ -1,6 +1,7 @@
 resource "aws_elasticache_replication_group" "this" {
   replication_group_id = coalesce(var.replication_group_id, var.name)
 
+  apply_immediately           = var.apply_immediately
   at_rest_encryption_enabled  = var.at_rest_encryption_enabled
   automatic_failover_enabled  = local.replica_enabled
   description                 = var.description
