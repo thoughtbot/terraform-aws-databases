@@ -1,3 +1,9 @@
+variable "apply_immediately" {
+  type        = bool
+  description = "Set to true to apply changes immediately"
+  default     = false
+}
+
 variable "alarm_actions" {
   type        = list(object({ arn = string }))
   description = "SNS topcis or other actions to invoke for alarms"
