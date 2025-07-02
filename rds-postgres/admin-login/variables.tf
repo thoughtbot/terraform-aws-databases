@@ -31,6 +31,12 @@ variable "read_principals" {
   default     = null
 }
 
+variable "replica_host" {
+  description = "Hostname to use when connecting to the database replica"
+  type        = string
+  default     = null
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string
