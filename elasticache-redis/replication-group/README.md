@@ -53,7 +53,7 @@ Provision a Redis cluster using AWS ElastiCache.
 | <a name="input_description"></a> [description](#input\_description) | Human-readable description for this replication group | `string` | n/a | yes |
 | <a name="input_enable_kms"></a> [enable\_kms](#input\_enable\_kms) | Enable KMS encryption | `bool` | `true` | no |
 | <a name="input_engine"></a> [engine](#input\_engine) | Elasticache database engine; defaults to Redis | `string` | `"redis"` | no |
-| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |
+| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | `"7.1"` | no |
 | <a name="input_global_replication_group_id"></a> [global\_replication\_group\_id](#input\_global\_replication\_group\_id) | The ID of the global replication group to which this replication group should belong. | `string` | `null` | no |
 | <a name="input_initial_auth_token"></a> [initial\_auth\_token](#input\_initial\_auth\_token) | Override the initial auth token | `string` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | KMS key to encrypt data at rest | `string` | `null` | no |

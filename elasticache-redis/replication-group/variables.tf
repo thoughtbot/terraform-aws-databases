@@ -42,6 +42,7 @@ variable "engine" {
 variable "engine_version" {
   type        = string
   description = "Version for RDS database engine"
+  default     = "7.1"
 }
 
 variable "global_replication_group_id" {
