@@ -36,6 +36,12 @@ variable "max_allocated_storage" {
   default     = 0
 }
 
+variable "enabled_cloudwatch_logs_exports" {
+  type        = list(string)
+  description = "Set of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported"
+  default     = []
+}
+
 variable "performance_insights_enabled" {
   type        = bool
   default     = true
