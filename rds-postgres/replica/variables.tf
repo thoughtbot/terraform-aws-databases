@@ -119,6 +119,6 @@ variable "parameter_group_name" {
 
 variable "deletion_protection" {
   description = "deletion protection to avoid accidental deletion"
-  type        =  bool
+  type        = bool
   default     = false
 }
