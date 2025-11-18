@@ -25,6 +25,7 @@ resource "aws_db_instance" "this" {
   tags                            = var.tags
   username                        = var.admin_username
   vpc_security_group_ids          = local.server_security_group_ids
+  deletion_protection             = var.deletion_protection
 
   final_snapshot_identifier = join(
     "-",

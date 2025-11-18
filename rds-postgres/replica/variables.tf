@@ -116,3 +116,9 @@ variable "parameter_group_name" {
   type        = string
   default     = ""
 }
+
+variable "deletion_protection" {
+  description = "deletion protection to avoid accidental deletion"
+  type        =  bool
+  default     = false
+}

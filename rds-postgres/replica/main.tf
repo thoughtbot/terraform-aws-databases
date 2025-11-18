@@ -15,6 +15,7 @@ resource "aws_db_instance" "this" {
   storage_encrypted               = var.storage_encrypted
   tags                            = var.tags
   vpc_security_group_ids          = var.vpc_security_group_ids
+  deletion_protection            = var.deletion_protection
 
   depends_on = [module.parameter_group]
 }

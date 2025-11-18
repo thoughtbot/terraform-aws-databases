@@ -262,3 +262,8 @@ variable "subnet_ids" {
   default     = null
 }
 
+variable "deletion_protection" {
+  description = "deletion protection to avoid accidental deletion"
+  type        =  bool
+  default     = false
+}
