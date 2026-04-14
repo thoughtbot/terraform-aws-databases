@@ -4,6 +4,16 @@ variable "admin_principals" {
   default     = null
 }
 
+variable "replica_regions" {
+  description = "List of regions to replicate the secret to"
+  type = list(object({
+    region     = string
+    kms_key_id = optional(string)
+  }))
+  default = []
+}
+
+
 variable "replication_group_id" {
   description = "ID of the group for which the auth token will be managed"
   type        = string
