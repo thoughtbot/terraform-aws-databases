@@ -7,6 +7,7 @@ module "secret" {
   read_principals  = var.read_principals
   resource_tags    = var.tags
   trust_tags       = var.trust_tags
+  replica_regions  = var.replica_regions
 
   initial_value = jsonencode({
     host  = data.aws_elasticache_replication_group.this.primary_endpoint_address
