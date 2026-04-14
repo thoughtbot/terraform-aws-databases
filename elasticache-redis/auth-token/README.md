@@ -48,6 +48,7 @@ token is changed.
 | <a name="input_admin_principals"></a> [admin\_principals](#input\_admin\_principals) | Principals allowed to peform admin actions (default: current account) | `list(string)` | `null` | no |
 | <a name="input_initial_auth_token"></a> [initial\_auth\_token](#input\_initial\_auth\_token) | Inital auth token passed when the group was created | `string` | n/a | yes |
 | <a name="input_read_principals"></a> [read\_principals](#input\_read\_principals) | Principals allowed to read the secret (default: current account) | `list(string)` | `null` | no |
+| <a name="input_replica_regions"></a> [replica\_regions](#input\_replica\_regions) | List of regions to replicate the secret to | <pre>list(object({<br>    region     = string<br>    kms_key_id = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_replication_group_id"></a> [replication\_group\_id](#input\_replication\_group\_id) | ID of the group for which the auth token will be managed | `string` | n/a | yes |
 | <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | Override the name for this secret | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | Security groups to attach to the rotation function | `list(string)` | `[]` | no |

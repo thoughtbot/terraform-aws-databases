@@ -88,6 +88,7 @@ module "rds_admin_password" {
 | <a name="input_grants"></a> [grants](#input\_grants) | List of GRANT statements for this user | `list(string)` | n/a | yes |
 | <a name="input_read_principals"></a> [read\_principals](#input\_read\_principals) | Principals allowed to read the secret (default: current account) | `list(string)` | `null` | no |
 | <a name="input_replica"></a> [replica](#input\_replica) | Whether the login is for a replica instance | `bool` | `false` | no |
+| <a name="input_replica_regions"></a> [replica\_regions](#input\_replica\_regions) | List of regions to replicate the secret to | <pre>list(object({<br>    region     = string<br>    kms_key_id = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_secret_name"></a> [secret\_name](#input\_secret\_name) | Override the name for this secret | `string` | `null` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets in which the rotation function should run | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
