@@ -8,14 +8,14 @@ Provision a Redis cluster using AWS ElastiCache.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | ~> 3.0 |
 
 ## Modules
@@ -23,7 +23,7 @@ Provision a Redis cluster using AWS ElastiCache.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_client_security_group"></a> [client\_security\_group](#module\_client\_security\_group) | ../../security-group | n/a |
-| <a name="module_customer_kms"></a> [customer\_kms](#module\_customer\_kms) | github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms | v0.8.0 |
+| <a name="module_customer_kms"></a> [customer\_kms](#module\_customer\_kms) | github.com/thoughtbot/terraform-aws-secrets//customer-managed-kms | v0.9.1 |
 | <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group | n/a |
 
 ## Resources

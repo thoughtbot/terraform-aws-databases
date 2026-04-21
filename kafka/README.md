@@ -25,20 +25,20 @@ module "kafka_staging" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_additional_vpc"></a> [additional\_vpc](#module\_additional\_vpc) | github.com/thoughtbot/flightdeck//aws/network-data | v0.9.2 |
-| <a name="module_network"></a> [network](#module\_network) | github.com/thoughtbot/flightdeck//aws/network-data | v0.9.2 |
+| <a name="module_additional_vpc"></a> [additional\_vpc](#module\_additional\_vpc) | github.com/thoughtbot/flightdeck//aws/network-data | v0.13.6 |
+| <a name="module_network"></a> [network](#module\_network) | github.com/thoughtbot/flightdeck//aws/network-data | v0.13.6 |
 
 ## Resources
 
