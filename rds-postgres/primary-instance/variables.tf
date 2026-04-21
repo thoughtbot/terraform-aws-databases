@@ -38,7 +38,7 @@ variable "backup_window" {
 variable "ca_cert_id" {
   type        = string
   description = "Certificate authority for RDS database"
-  default     = "rds-ca-rsa2048-g1"
+  default     = null
 }
 
 variable "create_default_db" {
