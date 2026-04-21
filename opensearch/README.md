@@ -4,19 +4,19 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.2 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_elasticsearch_secret"></a> [elasticsearch\_secret](#module\_elasticsearch\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret | v0.8.0 |
+| <a name="module_elasticsearch_secret"></a> [elasticsearch\_secret](#module\_elasticsearch\_secret) | github.com/thoughtbot/terraform-aws-secrets//secret | v0.9.1 |
 
 ## Resources
 
