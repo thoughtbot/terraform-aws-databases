@@ -5,9 +5,14 @@ resource "aws_msk_cluster" "this" {
 
   broker_node_group_info {
     instance_type   = var.instance_type
-    ebs_volume_size = var.ebs_volume_size
     client_subnets  = module.network.private_subnet_ids
     security_groups = [aws_security_group.this.id]
+
+    storage_info {
+      ebs_storage_info {
+        volume_size = var.ebs_volume_size
+      }
+    }
   }
 
   encryption_info {
@@ -48,7 +53,7 @@ resource "aws_msk_cluster" "this" {
 }
 
 module "network" {
-  source = "github.com/thoughtbot/flightdeck//aws/network-data?ref=v0.9.2"
+  source = "github.com/thoughtbot/flightdeck//aws/network-data?ref=v0.13.6"
 
   private_tags = var.private_tags
   public_tags  = var.public_tags
@@ -57,7 +62,7 @@ module "network" {
 
 module "additional_vpc" {
   count  = length(keys(var.additional_vpc_tags)) == 0 ? 0 : 1
-  source = "github.com/thoughtbot/flightdeck//aws/network-data?ref=v0.9.2"
+  source = "github.com/thoughtbot/flightdeck//aws/network-data?ref=v0.13.6"
 
   vpc_tags = var.additional_vpc_tags
 }
