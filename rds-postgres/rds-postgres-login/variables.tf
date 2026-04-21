@@ -4,6 +4,16 @@ variable "admin_login_secret_arn" {
   default     = null
 }
 
+variable "replica_regions" {
+  description = "List of regions to replicate the secret to"
+  type = list(object({
+    region     = string
+    kms_key_id = optional(string)
+  }))
+  default = []
+}
+
+
 variable "admin_login_kms_key_id" {
   type        = string
   description = "ARN of the KMS key used to encrypt the admin login"

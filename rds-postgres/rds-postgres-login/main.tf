@@ -1,5 +1,5 @@
 module "secret" {
-  source = "github.com/thoughtbot/terraform-aws-secrets//secret?ref=v0.8.0"
+  source = "github.com/thoughtbot/terraform-aws-secrets//secret?ref=v0.9.0"
 
   admin_principals = var.admin_principals
   description      = "Postgres password for: ${local.full_name}"
@@ -7,6 +7,7 @@ module "secret" {
   read_principals  = var.read_principals
   resource_tags    = var.tags
   trust_tags       = var.trust_tags
+  replica_regions  = var.replica_regions
 
   initial_value = jsonencode({
     dbname   = var.database.db_name
@@ -19,7 +20,7 @@ module "secret" {
 }
 
 module "rotation" {
-  source = "github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.8.0"
+  source = "github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.9.0"
 
   handler            = "lambda_function.lambda_handler"
   role_arn           = module.secret.rotation_role_arn
