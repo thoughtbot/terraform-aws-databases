@@ -62,11 +62,6 @@ variable "num_node_groups" {
     condition     = var.num_node_groups == null || var.num_node_groups <= (var.replica_count + 1)
     error_message = "num_node_groups cannot exceed the total instance count implied by replica_count + 1."
   }
-
-  validation {
-    condition     = var.num_node_groups == null || var.replicas_per_node_group != null || ((var.replica_count + 1) % var.num_node_groups == 0)
-    error_message = "When num_node_groups is set without replicas_per_node_group, replica_count + 1 must divide evenly across node groups."
-  }
 }
 
 variable "parameter_group_name" {
@@ -95,11 +90,6 @@ variable "replicas_per_node_group" {
   validation {
     condition     = var.replicas_per_node_group == null || var.num_node_groups != null
     error_message = "replicas_per_node_group can only be set when num_node_groups is also set."
-  }
-
-  validation {
-    condition     = var.replicas_per_node_group == null || ((var.replica_count + 1) == (var.num_node_groups * (var.replicas_per_node_group + 1)))
-    error_message = "When replicas_per_node_group is set, replica_count + 1 must equal num_node_groups * (replicas_per_node_group + 1)."
   }
 }
 

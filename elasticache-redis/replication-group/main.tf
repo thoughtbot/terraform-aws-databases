@@ -48,6 +48,16 @@ resource "aws_elasticache_replication_group" "this" {
       # Minor upgrades will cause noise in diffs
       engine_version
     ]
+
+    precondition {
+      condition     = !local.use_num_node_groups || var.replicas_per_node_group != null || ((local.instance_count % var.num_node_groups) == 0)
+      error_message = "When num_node_groups is set without replicas_per_node_group, replica_count + 1 must divide evenly across node groups."
+    }
+
+    precondition {
+      condition     = var.replicas_per_node_group == null || (local.instance_count == (var.num_node_groups * (var.replicas_per_node_group + 1)))
+      error_message = "When replicas_per_node_group is set, replica_count + 1 must equal num_node_groups * (replicas_per_node_group + 1)."
+    }
   }
 }
 
