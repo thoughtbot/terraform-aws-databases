@@ -8,9 +8,11 @@ resource "aws_elasticache_replication_group" "this" {
   kms_key_id                 = var.kms_key == null ? null : var.kms_key.id
   multi_az_enabled           = local.replica_enabled
   node_type                  = var.node_type
-  num_cache_clusters         = local.instance_count
+  num_cache_clusters         = local.use_num_node_groups ? null : local.instance_count
+  num_node_groups            = local.num_node_groups
   parameter_group_name       = var.parameter_group_name
   port                       = var.port
+  replicas_per_node_group    = local.replicas_per_node_group
   description                = var.description
   security_group_ids         = local.server_security_group_ids
   snapshot_name              = var.snapshot_name
@@ -176,8 +178,11 @@ locals {
   instance_size             = split(".", var.node_type)[2]
   instances                 = sort(aws_elasticache_replication_group.this.member_clusters)
   owned_security_group_ids  = module.server_security_group.*.id
+  num_node_groups           = local.use_num_node_groups ? var.num_node_groups : null
   replica_enabled           = var.replica_count > 0
+  replicas_per_node_group   = local.use_num_node_groups ? coalesce(var.replicas_per_node_group, (local.instance_count / local.num_node_groups) - 1) : null
   shared_security_group_ids = var.server_security_group_ids
+  use_num_node_groups       = local.replica_enabled && var.num_node_groups != null
 
   instance_size_thresholds = {
     micro = 128

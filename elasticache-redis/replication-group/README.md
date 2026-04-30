@@ -53,9 +53,11 @@ Provision a Redis cluster using AWS ElastiCache.
 | <a name="input_kms_key"></a> [kms\_key](#input\_kms\_key) | Custom KMS key to encrypt data at rest | `object({ arn = string })` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name for this cluster | `string` | n/a | yes |
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | Node type for the Elasticache instance | `string` | n/a | yes |
+| <a name="input_num_node_groups"></a> [num\_node\_groups](#input\_num\_node\_groups) | Number of node groups (shards) to create when sharding is enabled | `number` | `null` | no |
 | <a name="input_parameter_group_name"></a> [parameter\_group\_name](#input\_parameter\_group\_name) | Parameter group name for the Redis cluster | `string` | `null` | no |
 | <a name="input_port"></a> [port](#input\_port) | Port on which to listen | `number` | `6379` | no |
 | <a name="input_replica_count"></a> [replica\_count](#input\_replica\_count) | Number of read-only replicas to add to the cluster | `number` | `1` | no |
+| <a name="input_replicas_per_node_group"></a> [replicas\_per\_node\_group](#input\_replicas\_per\_node\_group) | Number of replicas to create in each node group when num\_node\_groups is set | `number` | `null` | no |
 | <a name="input_replication_group_id"></a> [replication\_group\_id](#input\_replication\_group\_id) | Override the ID for the replication group | `string` | `""` | no |
 | <a name="input_server_security_group_ids"></a> [server\_security\_group\_ids](#input\_server\_security\_group\_ids) | IDs of VPC security groups for this instance. One of vpc\_id or server\_security\_group\_ids is required | `list(string)` | `[]` | no |
 | <a name="input_server_security_group_name"></a> [server\_security\_group\_name](#input\_server\_security\_group\_name) | Override the name for the security group; defaults to identifer | `string` | `""` | no |

@@ -48,6 +48,27 @@ variable "node_type" {
   description = "Node type for the Elasticache instance"
 }
 
+variable "num_node_groups" {
+  type        = number
+  default     = null
+  description = "Number of node groups (shards) to create when sharding is enabled"
+
+  validation {
+    condition     = var.num_node_groups == null || var.replica_count > 0
+    error_message = "num_node_groups can only be set when replica_count is greater than 0."
+  }
+
+  validation {
+    condition     = var.num_node_groups == null || var.num_node_groups <= (var.replica_count + 1)
+    error_message = "num_node_groups cannot exceed the total instance count implied by replica_count + 1."
+  }
+
+  validation {
+    condition     = var.num_node_groups == null || var.replicas_per_node_group != null || ((var.replica_count + 1) % var.num_node_groups == 0)
+    error_message = "When num_node_groups is set without replicas_per_node_group, replica_count + 1 must divide evenly across node groups."
+  }
+}
+
 variable "parameter_group_name" {
   type        = string
   description = "Parameter group name for the Redis cluster"
@@ -64,6 +85,22 @@ variable "replica_count" {
   type        = number
   default     = 1
   description = "Number of read-only replicas to add to the cluster"
+}
+
+variable "replicas_per_node_group" {
+  type        = number
+  default     = null
+  description = "Number of replicas to create in each node group when num_node_groups is set"
+
+  validation {
+    condition     = var.replicas_per_node_group == null || var.num_node_groups != null
+    error_message = "replicas_per_node_group can only be set when num_node_groups is also set."
+  }
+
+  validation {
+    condition     = var.replicas_per_node_group == null || ((var.replica_count + 1) == (var.num_node_groups * (var.replicas_per_node_group + 1)))
+    error_message = "When replicas_per_node_group is set, replica_count + 1 must equal num_node_groups * (replicas_per_node_group + 1)."
+  }
 }
 
 variable "replication_group_id" {
