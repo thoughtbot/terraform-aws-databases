@@ -59,6 +59,12 @@ variable "replicate_source_db" {
   type        = string
 }
 
+variable "replica_region" {
+  description = "Region where the replica will be managed; defaults to the provider region when null"
+  type        = string
+  default     = null
+}
+
 variable "storage_encrypted" {
   type        = bool
   default     = true

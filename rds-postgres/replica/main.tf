@@ -10,6 +10,7 @@ resource "aws_db_instance" "this" {
   parameter_group_name            = local.parameter_group_name
   performance_insights_enabled    = var.performance_insights_enabled
   publicly_accessible             = var.publicly_accessible
+  region                          = var.replica_region
   replicate_source_db             = var.replicate_source_db
   skip_final_snapshot             = true
   storage_encrypted               = var.storage_encrypted
