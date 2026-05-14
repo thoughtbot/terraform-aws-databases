@@ -4,6 +4,7 @@ resource "aws_security_group_rule" "ingress_security_groups" {
   description              = var.description
   from_port                = var.port
   protocol                 = "tcp"
+  region                   = var.region
   security_group_id        = var.security_group_id
   source_security_group_id = var.allowed_security_group_ids[count.index]
   to_port                  = var.port
@@ -17,6 +18,7 @@ resource "aws_security_group_rule" "ingress_cidr_blocks" {
   description       = var.description
   from_port         = var.port
   protocol          = "tcp"
+  region            = var.region
   security_group_id = var.security_group_id
   to_port           = var.port
   type              = "ingress"

@@ -77,6 +77,12 @@ variable "subnet_group_name" {
   default     = null
 }
 
+variable "subnet_ids" {
+  description = "Subnets for the replica; when set and subnet_group_name is null, the module creates a subnet group"
+  type        = list(string)
+  default     = []
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags to be applied to created resources"
@@ -123,8 +129,26 @@ variable "parameter_group_name" {
   default     = ""
 }
 
+variable "allowed_cidr_blocks" {
+  description = "CIDR blocks allowed to access the replica when creating a security group"
+  type        = list(string)
+  default     = []
+}
+
 variable "deletion_protection" {
   description = "deletion protection to avoid accidental deletion"
   type        = bool
   default     = false
+}
+
+variable "create_server_security_group" {
+  type        = bool
+  description = "Set to true to create a dedicated server security group for the replica"
+  default     = false
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "ID of the VPC for the replica security group; required when create_server_security_group is true"
+  default     = null
 }

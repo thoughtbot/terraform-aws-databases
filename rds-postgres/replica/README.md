@@ -22,11 +22,13 @@ Provision a Postgres database configured as a replica using AWS RDS.
 |------|--------|---------|
 | <a name="module_alarms"></a> [alarms](#module\_alarms) | ../cloudwatch-alarms |  |
 | <a name="module_parameter_group"></a> [parameter\_group](#module\_parameter\_group) | ../parameter-group |  |
+| <a name="module_server_security_group"></a> [server\_security\_group](#module\_server\_security\_group) | ../../security-group |  |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [aws_db_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
 | [aws_db_instance.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) | resource |
 
 ## Inputs
@@ -35,9 +37,11 @@ Provision a Postgres database configured as a replica using AWS RDS.
 |------|-------------|------|---------|:--------:|
 | <a name="input_alarm_actions"></a> [alarm\_actions](#input\_alarm\_actions) | SNS topic ARNs or other actions to invoke for alarms | `list(string)` | `[]` | no |
 | <a name="input_allocated_storage"></a> [allocated\_storage](#input\_allocated\_storage) | Size in GB for the database instance | `number` | n/a | yes |
+| <a name="input_allowed_cidr_blocks"></a> [allowed\_cidr\_blocks](#input\_allowed\_cidr\_blocks) | CIDR blocks allowed to access the replica when creating a security group | `list(string)` | `[]` | no |
 | <a name="input_apply_immediately"></a> [apply\_immediately](#input\_apply\_immediately) | Set to true to immediately apply changes and cause downtime | `bool` | `false` | no |
 | <a name="input_create_cloudwatch_alarms"></a> [create\_cloudwatch\_alarms](#input\_create\_cloudwatch\_alarms) | Set to false to disable creation of CloudWatch alarms | `bool` | `true` | no |
 | <a name="input_create_parameter_group"></a> [create\_parameter\_group](#input\_create\_parameter\_group) | Set to false to use existing parameter group | `bool` | `true` | no |
+| <a name="input_create_server_security_group"></a> [create\_server\_security\_group](#input\_create\_server\_security\_group) | Set to true to create a dedicated server security group for the replica | `bool` | `false` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Version for RDS database engine | `string` | n/a | yes |
 | <a name="input_force_ssl"></a> [force\_ssl](#input\_force\_ssl) | Set to false to allow unencrypted connections to the database | `bool` | `true` | no |
 | <a name="input_identifier"></a> [identifier](#input\_identifier) | Unique identifier for this database | `string` | n/a | yes |
@@ -50,9 +54,11 @@ Provision a Postgres database configured as a replica using AWS RDS.
 | <a name="input_replicate_source_db"></a> [replicate\_source\_db](#input\_replicate\_source\_db) | Identifier of the primary database instance to replicate | `string` | n/a | yes |
 | <a name="input_replica_region"></a> [replica\_region](#input\_replica\_region) | Region where the replica will be managed; defaults to the provider region when null | `string` | `null` | no |
 | <a name="input_storage_encrypted"></a> [storage\_encrypted](#input\_storage\_encrypted) | Set to false to disable on-disk encryption | `bool` | `true` | no |
+| <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | Subnets for the replica; when set and subnet_group_name is null, the module creates a subnet group | `list(string)` | `[]` | no |
 | <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Name of the RDS subnet group (only for cross-region replication) | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to be applied to created resources | `map(string)` | `{}` | no |
 | <a name="input_vpc_security_group_ids"></a> [vpc\_security\_group\_ids](#input\_vpc\_security\_group\_ids) | IDs of VPC security groups for this instance (if different from primary) | `list(string)` | `[]` | no |
+| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | ID of the VPC for the replica security group; required when create_server_security_group is true | `string` | `null` | no |
 
 ## Outputs
 
@@ -61,4 +67,5 @@ Provision a Postgres database configured as a replica using AWS RDS.
 | <a name="output_host"></a> [host](#output\_host) | The hostname to use when connecting to this replica |
 | <a name="output_identifier"></a> [identifier](#output\_identifier) | Identifier of the created RDS database |
 | <a name="output_instance"></a> [instance](#output\_instance) | The created replica |
+| <a name="output_server_security_group_id"></a> [server\_security\_group\_id](#output\_server\_security\_group\_id) | ID of the server security group created for the replica |
 <!-- END_TF_DOCS -->

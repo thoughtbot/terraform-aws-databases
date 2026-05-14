@@ -1,7 +1,7 @@
 resource "aws_db_instance" "this" {
   allocated_storage               = var.allocated_storage
   apply_immediately               = var.apply_immediately
-  db_subnet_group_name            = var.subnet_group_name
+  db_subnet_group_name            = local.db_subnet_group_name
   identifier                      = var.identifier
   instance_class                  = var.instance_class
   kms_key_id                      = var.kms_key_id
@@ -15,10 +15,24 @@ resource "aws_db_instance" "this" {
   skip_final_snapshot             = true
   storage_encrypted               = var.storage_encrypted
   tags                            = var.tags
-  vpc_security_group_ids          = var.vpc_security_group_ids
+  vpc_security_group_ids          = local.server_security_group_ids
   deletion_protection             = var.deletion_protection
 
-  depends_on = [module.parameter_group]
+  depends_on = [
+    aws_db_subnet_group.this,
+    module.parameter_group,
+    module.server_security_group,
+  ]
+}
+
+resource "aws_db_subnet_group" "this" {
+  count = local.create_subnet_group ? 1 : 0
+  name  = local.subnet_group_name
+
+  description = "Postgres replica subnet group"
+  region      = var.replica_region
+  subnet_ids  = var.subnet_ids
+  tags        = var.tags
 }
 
 module "alarms" {
@@ -41,9 +55,43 @@ module "parameter_group" {
   tags           = var.tags
 }
 
+module "server_security_group" {
+  count  = var.create_server_security_group ? 1 : 0
+  source = "../../security-group"
+
+  allowed_cidr_blocks = var.allowed_cidr_blocks
+  description         = "RDS Postgres replica server: ${var.identifier}"
+  name                = "${var.identifier}-server"
+  ports = {
+    postgres = 5432
+  }
+  randomize_name = true
+  region         = var.replica_region
+  tags           = var.tags
+  vpc_id         = var.vpc_id
+}
+
 locals {
+  owned_vpc_security_group_ids = module.server_security_group.*.id
   parameter_group_name = coalesce(
     var.parameter_group_name,
     var.identifier
+  )
+  create_subnet_group = (
+    var.subnet_group_name == null &&
+    length(var.subnet_ids) > 0
+  )
+  subnet_group_name = coalesce(
+    var.subnet_group_name,
+    var.identifier
+  )
+  db_subnet_group_name = (
+    var.subnet_group_name != null || local.create_subnet_group ?
+    local.subnet_group_name :
+    null
+  )
+  server_security_group_ids = concat(
+    local.owned_vpc_security_group_ids,
+    var.vpc_security_group_ids
   )
 }

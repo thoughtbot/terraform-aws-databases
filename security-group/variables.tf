@@ -38,6 +38,12 @@ variable "randomize_name" {
   default     = true
 }
 
+variable "region" {
+  type        = string
+  description = "Region where the security group resources will be managed; defaults to the provider region when null"
+  default     = null
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags to be applied to created resources"

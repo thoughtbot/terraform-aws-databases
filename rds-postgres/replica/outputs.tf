@@ -12,3 +12,8 @@ output "instance" {
   description = "The created replica"
   value       = aws_db_instance.this
 }
+
+output "server_security_group_id" {
+  description = "ID of the server security group created for the replica"
+  value       = join("", module.server_security_group.*.id)
+}
