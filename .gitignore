@@ -9,3 +9,5 @@
 .terraformrc
 .validate
 python
+.plugin-build/
+postgres-msk-debezium-plugin-*.zip
