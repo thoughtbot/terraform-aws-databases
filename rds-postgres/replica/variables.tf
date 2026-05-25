@@ -65,6 +65,24 @@ variable "replica_region" {
   default     = null
 }
 
+variable "storage_type" {
+  description = "Storage type (e.g. gp2, gp3, io1). Leave null to keep the AWS default."
+  type        = string
+  default     = null
+}
+
+variable "iops" {
+  description = "Provisioned IOPS. Only applicable for gp3/io1 storage types."
+  type        = number
+  default     = null
+}
+
+variable "storage_throughput" {
+  description = "Storage throughput (MiB/s). Only applicable for gp3 storage type."
+  type        = number
+  default     = null
+}
+
 variable "storage_encrypted" {
   type        = bool
   default     = true

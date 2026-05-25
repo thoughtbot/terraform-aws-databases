@@ -14,6 +14,9 @@ resource "aws_db_instance" "this" {
   replicate_source_db             = var.replicate_source_db
   skip_final_snapshot             = true
   storage_encrypted               = var.storage_encrypted
+  storage_type                    = var.storage_type
+  iops                            = var.iops
+  storage_throughput              = var.storage_throughput
   tags                            = var.tags
   vpc_security_group_ids          = local.server_security_group_ids
   deletion_protection             = var.deletion_protection
