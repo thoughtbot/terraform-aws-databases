@@ -13,9 +13,27 @@ variable "global_replication_group_id" {
   description = "The ID of the global replication group to which this replication group belongs."
 }
 
+variable "auth_token_secret_name" {
+  type        = string
+  description = "Name (or ARN) of the Secrets Manager secret holding the global datastore primary's auth token, as a JSON object with a `token` key (the format written by the auth-token module). The secret must be readable from this region. Preferred over auth_token so the value stays in sync across rotations."
+  default     = null
+}
+
+variable "auth_token" {
+  type        = string
+  description = "Auth token of the global datastore primary, supplied directly. Used only when auth_token_secret_name is not set. Must match the primary exactly; it is not inherited at creation time."
+  sensitive   = true
+  default     = null
+}
+
 variable "subnet_ids" {
   description = "Subnets connected to the database"
   type        = list(string)
+}
+
+variable "node_type" {
+  type        = string
+  description = "Node type of the global datastore (used only to size the CloudWatch alarms; not set on the replication group, which inherits it from the primary). Must match the primary's node type."
 }
 
 variable "replication_group_id" {

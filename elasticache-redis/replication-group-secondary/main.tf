@@ -16,6 +16,20 @@ resource "aws_elasticache_replication_group" "this" {
   num_cache_clusters         = local.instance_count
   security_group_ids         = local.server_security_group_ids
   subnet_group_name          = aws_elasticache_subnet_group.this.name
+
+  # Joining a global datastore whose primary has an auth token requires the
+  # CreateReplicationGroup call to pass the matching token; it is not inherited
+  # at creation time. transit_encryption_enabled is still inherited and must
+  # not be set here. The token is read from the primary's rotated Secrets
+  # Manager secret so it stays in sync after rotation.
+  auth_token = local.auth_token
+
+  lifecycle {
+    ignore_changes = [
+      # The token is rotated externally
+      auth_token
+    ]
+  }
 }
 
 resource "aws_elasticache_subnet_group" "this" {
@@ -188,15 +202,26 @@ resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
   }
 }
 
-# The node type is inherited from the global datastore primary, so read it back
-# off the created replication group rather than requiring it as an input.
+# The node type is inherited from the global datastore primary and is not set
+# on the replication group resource. It is still needed here to size the
+# CloudWatch alarms, and must be known at plan time so the burstable-credit
+# alarm's count can be evaluated, so it is taken as an input rather than read
+# back off the (apply-time) resource attribute.
 data "aws_ec2_instance_type" "instance_attributes" {
   instance_type = local.instance_size
 }
 
+# The auth token must match the global datastore primary. Read it from the
+# primary's rotated Secrets Manager secret (replicated into this region) rather
+# than passing the raw value, so the two stay in sync across rotations.
+data "aws_secretsmanager_secret_version" "auth_token" {
+  count     = var.auth_token_secret_name != null ? 1 : 0
+  secret_id = var.auth_token_secret_name
+}
+
 locals {
   instance_count            = var.replica_count + 1
-  instance_size             = replace(aws_elasticache_replication_group.this.node_type, "cache.", "")
+  instance_size             = replace(var.node_type, "cache.", "")
   instances                 = sort(aws_elasticache_replication_group.this.member_clusters)
   owned_security_group_ids  = module.server_security_group[*].id
   replica_enabled           = var.replica_count > 0
@@ -207,5 +232,12 @@ locals {
   server_security_group_ids = concat(
     local.owned_security_group_ids,
     local.shared_security_group_ids
+  )
+
+  # Prefer the token read from the secret; fall back to a directly-supplied one.
+  auth_token = (
+    var.auth_token_secret_name != null ?
+    jsondecode(data.aws_secretsmanager_secret_version.auth_token[0].secret_string)["token"] :
+    var.auth_token
   )
 }
