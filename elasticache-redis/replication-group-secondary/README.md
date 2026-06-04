@@ -40,6 +40,7 @@ arguments are intentionally omitted here -- the AWS provider rejects them when
 | [aws_elasticache_replication_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group) | resource |
 | [aws_elasticache_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group) | resource |
 | [aws_ec2_instance_type.instance_attributes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ec2_instance_type) | data source |
+| [aws_secretsmanager_secret_version.auth_token](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/secretsmanager_secret_version) | data source |
 
 ## Inputs
 
@@ -49,12 +50,15 @@ arguments are intentionally omitted here -- the AWS provider rejects them when
 | <a name="input_allowed_cidr_blocks"></a> [allowed\_cidr\_blocks](#input\_allowed\_cidr\_blocks) | CIDR blocks allowed to access the database | `list(string)` | `[]` | no |
 | <a name="input_allowed_security_group_ids"></a> [allowed\_security\_group\_ids](#input\_allowed\_security\_group\_ids) | Security group allowed to access the database | `list(string)` | `[]` | no |
 | <a name="input_apply_immediately"></a> [apply\_immediately](#input\_apply\_immediately) | Set to true to apply changes immediately | `bool` | `false` | no |
+| <a name="input_auth_token"></a> [auth\_token](#input\_auth\_token) | Auth token of the global datastore primary, supplied directly. Used only when auth\_token\_secret\_name is not set. Must match the primary exactly; it is not inherited at creation time. | `string` | `null` | no |
+| <a name="input_auth_token_secret_name"></a> [auth\_token\_secret\_name](#input\_auth\_token\_secret\_name) | Name (or ARN) of the Secrets Manager secret holding the global datastore primary's auth token, as a JSON object with a `token` key (the format written by the auth-token module). The secret must be readable from this region. Preferred over auth\_token so the value stays in sync across rotations. | `string` | `null` | no |
 | <a name="input_client_security_group_name"></a> [client\_security\_group\_name](#input\_client\_security\_group\_name) | Override the name for the security group; defaults to identifer | `string` | `""` | no |
 | <a name="input_create_client_security_group"></a> [create\_client\_security\_group](#input\_create\_client\_security\_group) | Set to false to only use existing security groups | `bool` | `true` | no |
 | <a name="input_create_server_security_group"></a> [create\_server\_security\_group](#input\_create\_server\_security\_group) | Set to false to only use existing security groups | `bool` | `true` | no |
 | <a name="input_description"></a> [description](#input\_description) | Human-readable description for this replication group | `string` | n/a | yes |
 | <a name="input_global_replication_group_id"></a> [global\_replication\_group\_id](#input\_global\_replication\_group\_id) | The ID of the global replication group to which this replication group belongs. | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name for this cluster | `string` | n/a | yes |
+| <a name="input_node_type"></a> [node\_type](#input\_node\_type) | Node type of the global datastore (used only to size the CloudWatch alarms; not set on the replication group, which inherits it from the primary). Must match the primary's node type. | `string` | n/a | yes |
 | <a name="input_port"></a> [port](#input\_port) | Port on which to listen (used for the security group; the replication group itself inherits the port from the global datastore) | `number` | `6379` | no |
 | <a name="input_replica_count"></a> [replica\_count](#input\_replica\_count) | Number of read-only replicas to add to the cluster | `number` | `1` | no |
 | <a name="input_replication_group_id"></a> [replication\_group\_id](#input\_replication\_group\_id) | Override the ID for the replication group | `string` | `""` | no |
