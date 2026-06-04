@@ -1,0 +1,23 @@
+name: elasticache-redis/replication-group-secondary
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - elasticache-redis/replication-group-secondary/**
+    types:
+      - closed
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    concurrency: ${{ github.workflow }}
+    with:
+      module: elasticache-redis/replication-group-secondary
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
+      pull-requests: write
