@@ -391,6 +391,14 @@ def get_alt_username(current_username):
     else:
         raise ValueError("Current username is not the primary or alternate username")
 
+def get_rds_instance_id_from_identifier_or_arn(value):
+    """Returns an RDS instance identifier from an identifier or DB instance ARN."""
+    if not value:
+        return None
+
+    return value.split(":db:", 1)[1] if ":db:" in value else value
+
+
 def is_rds_replica_database(replica_dict, admin_dict):
     """Validates that the database of a secret is a replica of the database of the admin secret
 
@@ -428,7 +436,10 @@ def is_rds_replica_database(replica_dict, admin_dict):
 
     # DB Instance identifiers are unique - can only be one result
     current_instance = instances[0]
-    return admin_instance_id == current_instance.get('ReadReplicaSourceDBInstanceIdentifier')
+    source_instance_id = get_rds_instance_id_from_identifier_or_arn(
+        current_instance.get('ReadReplicaSourceDBInstanceIdentifier')
+    )
+    return admin_instance_id == source_instance_id
 
 def dict_to_url(secret):
     """Reformats connection details as a URL string
