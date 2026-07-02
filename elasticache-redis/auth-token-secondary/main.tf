@@ -46,7 +46,7 @@ module "rotation" {
   )
 
   variables = {
-    PRIMARY_AUTH_TOKEN_SECRET_ARN = data.aws_secretsmanager_secret_version.primary_auth_token.secret_arn
+    PRIMARY_AUTH_TOKEN_SECRET_ARN = data.aws_secretsmanager_secret_version.primary_auth_token.arn
   }
 }
 
@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "read_primary_auth_token" {
       "secretsmanager:DescribeSecret",
       "secretsmanager:GetSecretValue",
     ]
-    resources = [data.aws_secretsmanager_secret_version.primary_auth_token.secret_arn]
+    resources = [data.aws_secretsmanager_secret_version.primary_auth_token.arn]
   }
 
   statement {
@@ -101,7 +101,7 @@ data "aws_secretsmanager_secret_version" "primary_auth_token" {
 }
 
 data "aws_secretsmanager_secret" "primary_auth_token" {
-  arn = data.aws_secretsmanager_secret_version.primary_auth_token.secret_arn
+  arn = data.aws_secretsmanager_secret_version.primary_auth_token.arn
 }
 
 data "aws_kms_key" "primary_auth_token" {
