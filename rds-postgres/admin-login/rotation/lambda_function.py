@@ -13,6 +13,7 @@ logger.setLevel(logging.INFO)
 
 ALTERNATE_USERNAME = os.environ['ALTERNATE_USERNAME']
 PRIMARY_USERNAME = os.environ['PRIMARY_USERNAME']
+REPLICA_HOST = os.environ['REPLICA_HOST']
 
 
 def lambda_handler(event, context):
@@ -31,7 +32,7 @@ def lambda_handler(event, context):
         'username': <required: username>,
         'password': <required: password>,
         'dbname': <optional: database name, default to 'postgres'>,
-        'port': <optional: if not specified, default port 5432 will be used>
+        'port': <optional: if not specified, default port 5432 will be used>,
     }
 
     Args:
@@ -126,7 +127,11 @@ def create_secret(service_client, arn, token):
         current_dict['password'] = passwd['RandomPassword']
 
         # Add DATABASE_URL to secret
-        current_dict['DATABASE_URL'] = dict_to_url(current_dict)
+        current_dict['DATABASE_URL'] = dict_to_url(current_dict, False)
+
+        if REPLICA_HOST:
+            # Add DATABASE_REPLICA_URL to secret
+            current_dict['DATABASE_REPLICA_URL'] = dict_to_url(current_dict, True)
 
         # Put the secret
         service_client.put_secret_value(SecretId=arn, ClientRequestToken=token, SecretString=json.dumps(current_dict), VersionStages=['AWSPENDING'])
@@ -278,7 +283,7 @@ def finish_secret(service_client, arn, token):
     service_client.update_secret_version_stage(SecretId=arn, VersionStage="AWSCURRENT", MoveToVersionId=token, RemoveFromVersionId=current_version)
     logger.info("finishSecret: Successfully set AWSCURRENT stage to version %s for secret %s." % (token, arn))
 
-def dict_to_url(secret):
+def dict_to_url(secret, replica):
     """Reformats connection details as a URL string
 
     Generate a Heroku-style DATABASE_URL with connection details
@@ -289,9 +294,13 @@ def dict_to_url(secret):
     Returns:
         url: DATABASE_URL-style string
     """
+    if replica:
+        host = REPLICA_HOST
+    else:
+        host = secret['host']
 
     return "postgres://%s:%s@%s:%s/%s" % (secret['username'],
-            secret['password'], secret['host'], secret['port'],
+            secret['password'], host, secret['port'],
             secret['dbname'])
 
 def get_connection(secret_dict):
