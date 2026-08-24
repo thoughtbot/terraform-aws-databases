@@ -30,6 +30,12 @@ variable "replica_regions" {
   default = []
 }
 
+variable "rotation_enabled" {
+  description = "Set false to disable rotation of the secret (removes the rotation function and schedule)"
+  type        = bool
+  default     = true
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string
