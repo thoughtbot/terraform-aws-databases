@@ -55,6 +55,12 @@ variable "read_principals" {
   default     = null
 }
 
+variable "rotation_enabled" {
+  description = "Set false to disable rotation of the secret (removes the rotation function and schedule)"
+  type        = bool
+  default     = true
+}
+
 variable "secret_name" {
   description = "Override the name for this secret"
   type        = string

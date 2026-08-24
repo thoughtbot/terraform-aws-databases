@@ -25,6 +25,7 @@ module "secret" {
 }
 
 module "rotation" {
+  count  = var.rotation_enabled ? 1 : 0
   source = "github.com/thoughtbot/terraform-aws-secrets//secret-rotation-function?ref=v0.9.0"
 
   handler     = "lambda_function.lambda_handler"
@@ -47,6 +48,13 @@ module "rotation" {
     ALTERNATE_USERNAME = coalesce(var.alternate_username, "${local.source.username}_alt")
     PRIMARY_USERNAME   = local.source.username
   }
+}
+
+# Rotation was originally an un-indexed module call; preserve state when
+# rotation_enabled is left at its default.
+moved {
+  from = module.rotation
+  to   = module.rotation[0]
 }
 
 module "security_group" {
