@@ -1,4 +1,6 @@
 resource "aws_cloudwatch_metric_alarm" "cpu" {
+  region = var.region
+
   alarm_name          = "${var.identifier}-database-high-cpu"
   alarm_description   = "${var.identifier} is using more than 90% of its CPU"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -19,6 +21,8 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "disk" {
+  region = var.region
+
   alarm_name          = "${var.identifier}-database-disk-remaining"
   alarm_description   = "${var.identifier} has less than 10% of disk space remaining"
   comparison_operator = "LessThanOrEqualToThreshold"
@@ -39,6 +43,8 @@ resource "aws_cloudwatch_metric_alarm" "disk" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "memory" {
+  region = var.region
+
   alarm_name          = "${var.identifier}-datababase-memory-remaining"
   alarm_description   = "${var.identifier} has less than ${local.memory_threshold_mb}MiB of memory remaining"
   comparison_operator = "LessThanOrEqualToThreshold"
@@ -59,7 +65,9 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
-  count = data.aws_ec2_instance_type.instance_attributes.burstable_performance_supported == true ? 1 : 0
+  count = startswith(local.instance_type, "t") ? 1 : 0
+
+  region = var.region
 
   alarm_name          = "${var.identifier}-datababase-low-cpu-credit"
   alarm_description   = "Insufficient CPU credits for ${var.identifier}"
@@ -129,6 +137,8 @@ resource "aws_cloudwatch_metric_alarm" "check_cpu_balance" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_connections_limit" {
+  region = var.region
+
   alarm_name          = "${var.identifier}-database-connections-limit"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "5"
@@ -148,6 +158,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connections_limit" {
 }
 
 data "aws_ec2_instance_type" "instance_attributes" {
+  region        = var.region
   instance_type = local.instance_type
 }
 

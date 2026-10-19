@@ -30,3 +30,9 @@ variable "instance_class" {
   description = "Tier for the database instance to monitor"
   type        = string
 }
+
+variable "region" {
+  type        = string
+  description = "Region of the DB instance; defaults to the provider region when null"
+  default     = null
+}

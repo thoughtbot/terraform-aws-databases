@@ -46,6 +46,7 @@ module "alarms" {
   identifier        = aws_db_instance.this.identifier
   instance_class    = aws_db_instance.this.instance_class
   allocated_storage = var.allocated_storage
+  region            = var.replica_region
 }
 
 module "parameter_group" {
